@@ -1,0 +1,103 @@
+name: car_dekho_app
+description: "A new Flutter project."
+
+
+publish_to: 'none' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+
+
+
+
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  
+  
+  cupertino_icons: ^1.0.8
+  flutter_bloc:
+  dio:
+  equatable:
+  gap:
+  shared_preferences:
+  json_annotation:
+  intl:
+  animated_bottom_navigation_bar:
+  otp_text_field:
+  smooth_page_indicator:
+  google_fonts:
+  iconsax:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  json_serializable:
+  build_runner:
+
+
+
+
+
+
+flutter:
+
+  
+  
+  
+  uses-material-design: true
+
+  assets:
+    - asset/images/
+    - asset/logo/
+
+  
+  
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
