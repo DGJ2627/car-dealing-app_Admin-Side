@@ -12,52 +12,66 @@ class HomeScreenView extends StatelessWidget {
 
   static Widget builder(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeScreenCubit()..fetchAdminData(),
+      create: (context) => HomeScreenCubit(),
       child: const HomeScreenView(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // state.adminDataModel!.fullName ??
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColors.primaryColor,
           body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 40,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: AppColors.secondaryColor,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Gap(6),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          decoration: const BoxDecoration(
-                            color: AppColors.primaryColor,
-                            shape: BoxShape.circle,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: AppColors.secondaryColor,
                         ),
-                        const Gap(4),
-                        Text(
-                          state.adminDataModel!.fullName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(color: AppColors.primaryColor),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Gap(6),
+                            Container(
+                              height: 30,
+                              width: 30,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primaryColor,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const Gap(4),
+                            Text(
+                              "User",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(color: AppColors.primaryColor),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: AppColors.secondaryColor,
+                        child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Iconsax.notification,
+                                color: AppColors.primaryColor)),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -13,6 +13,7 @@ class SignInCubit extends Cubit<SignInState> {
   SignInCubit() : super(const SignInState(isLoggedIn: false, isLoading: true));
 
   final DioInterceptors dio = DioInterceptors();
+  //final BuildContext context;
 
   Future<void> signInFunction(
       {required String email,
@@ -38,6 +39,7 @@ class SignInCubit extends Cubit<SignInState> {
             context, HomeScreenView.routeName, (route) => true);
       } else if (response.statusCode == 422) {
         Log.error(response.statusCode);
+
         Log.debug(response);
         emit(state.copyWith(isLoading: false, isLoggedIn: false));
       } else {

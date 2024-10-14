@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../authentication/admin/sign_up_admin_view/sign_up_admin_view.dart';
 
 class SplashScreenView extends StatelessWidget {
-  static String roueName = "/";
+  static String routeName = "/";
 
   const SplashScreenView({super.key});
 

@@ -1,6 +1,6 @@
 import 'package:car_dekho_app/src/app/route/app_route.dart';
-import 'package:car_dekho_app/src/ui/splash_screen_view/splash_screen_view.dart';
 import 'package:flutter/material.dart';
+import '../ui/admin_screens_view/bottom_navigation_view.dart';
 import '../utils/theme.dart';
 
 class MyApp extends StatelessWidget {
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: AppRoute.screens,
-      initialRoute: SplashScreenView.roueName,
+      initialRoute: BottomNavigationView.routeName,
       theme: AppTheme.appTheme,
       themeMode: ThemeMode.light,
     );

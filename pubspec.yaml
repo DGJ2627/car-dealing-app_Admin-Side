@@ -47,6 +47,7 @@ dependencies:
   smooth_page_indicator:
   google_fonts:
   iconsax:
+  hugeicons:
 
 dev_dependencies:
   flutter_test:
