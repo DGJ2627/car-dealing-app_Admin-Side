@@ -6,4 +6,7 @@ abstract interface class AppColors {
   static const thirdColor = Color(0xff535151);
   static const backGroundColor = Color(0xffFFFFFF);
   static const blackColor = Color(0xff000000);
+  static const lightColor = Color(0xffFEEE91);
+  static const lightColor2 = Color(0xffFFBD73);
+  static const lightColor3 = Color(0xffFFD09B);
 }

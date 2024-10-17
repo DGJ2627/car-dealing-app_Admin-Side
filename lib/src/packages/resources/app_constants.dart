@@ -10,8 +10,9 @@ abstract interface class AppConstants {
   static final mobileNoPatternRegExp = RegExp(r'(^(?:[+0]9)?[0-9]{10}$)');
   static final userNamePatternRegExp = RegExp('[a-zA-Z]');
 
+  static final licenseNoPatternRegExp = RegExp(r'^[a-zA-Z]{5}[0-9]{5}$');
   static const String baseUrl =
-      "https://d21e-2405-201-200c-6876-fc11-538d-d1c9-a30a.ngrok-free.app";
+      "https://f5f2-2405-201-200c-6876-dc0b-bb4a-7428-bd41.ngrok-free.app";
 
   static storeAdminToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,10 +24,49 @@ abstract interface class AppConstants {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
   }
+
+  static uploadDocumentID(String documentID) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('documentID', documentID);
+  }
+
+  static Future<String?> getUploadDocumentID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('documentID');
+  }
+
+  static uploadBrandID(String uploadBrandID) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('uploadBrandID', uploadBrandID);
+  }
+
+  static Future<String?> getUploadBrandID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('uploadBrandID');
+  }
+
+  static Future<void> clearDocAndBrandName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('documentID');
+    await prefs.remove('uploadBrandID');
+  }
+
+  static Future<void> clearAllSharedPreferencesData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
 }
 
 abstract interface class ApiEndPoints {
   static const adminSignUp = '/registerAdmin';
   static const adminSignIn = '/adminLogin';
   static const fetchAdminData = '/adminDetails';
+  static const updateAdminData = '/updateAdminProfile';
+  static const addShowroom = '/addShowroom';
+  static const getShowroomList = '/showroomList';
+  static const addBrand = '/addBrand';
+  static const showBrandList = '/brandList';
+  static const uploadShowroomDoc = '/uploadShowroomDocuments';
 }

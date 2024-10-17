@@ -2,13 +2,17 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:car_dekho_app/src/logic/admin_profile_cubit/admin_profile_cubit.dart';
 import 'package:car_dekho_app/src/logic/bottom_navigation_cubit/bottom_navigation_cubit.dart';
 import 'package:car_dekho_app/src/logic/home_screen_cubit/home_screen_cubit.dart';
+import 'package:car_dekho_app/src/logic/showroom_list_cubit/showroom_list_cubit.dart';
 import 'package:car_dekho_app/src/packages/resources/colors.dart';
+import 'package:car_dekho_app/src/ui/admin_screens_view/showroom_screen_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import 'add_showroom_screen_view.dart';
+
 class BottomNavigationView extends StatelessWidget {
-  static String routeName = "/";
+  static String routeName = "/BottomNavigationView";
 
   const BottomNavigationView({super.key});
 
@@ -17,6 +21,7 @@ class BottomNavigationView extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => BottomNavigationCubit()),
         BlocProvider(create: (context) => HomeScreenCubit()),
+        BlocProvider(create: (context) => ShowroomListCubit(),),
         BlocProvider(create: (context) => AdminProfileCubit()),
       ],
       child: const BottomNavigationView(),
@@ -38,14 +43,16 @@ class BottomNavigationView extends StatelessWidget {
                 children: [
                   HugeIcon(
                     icon: state.screenIcon[index],
-                    color: AppColors.primaryColor,
+                    color: isActive
+                        ? AppColors.lightColor
+                        : AppColors.primaryColor,
                   ),
                   Text(
                     state.screenName[index].toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: AppColors.primaryColor),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: isActive
+                            ? AppColors.lightColor
+                            : AppColors.primaryColor),
                   ),
                 ],
               );
@@ -71,7 +78,9 @@ class BottomNavigationView extends StatelessWidget {
               height: 60,
               width: 60,
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, AddShowroomScreenView.routeName);
+                },
                 child: Container(
                     height: 60,
                     width: 60,

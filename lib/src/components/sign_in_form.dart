@@ -37,7 +37,8 @@ class _SignInFormState extends State<SignInForm> {
             fieldController: widget.emailController,
             fieldName: "Email",
             isReadOnly: false,
-            validator: (value) => textFieldValidator('email', value),
+            validator: (value) =>
+                InputValidator.textFieldValidator(FieldType.email, value),
             autoFocus: false,
             prefixIcon: const Icon(Iconsax.sms),
             obscureText: false,
@@ -48,7 +49,8 @@ class _SignInFormState extends State<SignInForm> {
             fieldController: widget.passwordController,
             fieldName: "Password",
             isReadOnly: false,
-            validator: (value) => textFieldValidator('password', value),
+            validator: (value) =>
+                InputValidator.textFieldValidator(FieldType.password, value),
             autoFocus: false,
             prefixIcon: const Icon(Iconsax.lock),
             obscureText: isEye ? false : true,

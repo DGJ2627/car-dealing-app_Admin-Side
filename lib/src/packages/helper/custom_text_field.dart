@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     required this.isReadOnly,
     required this.validator,
     required this.obscureText,
+    this.onTap,
   });
 
   final TextEditingController fieldController;
@@ -33,6 +34,7 @@ class CustomTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final bool isReadOnly;
   final String? Function(String?)? validator;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class CustomTextField extends StatelessWidget {
         validator: validator,
         controller: fieldController,
         onChanged: onChanged,
+        onTap: onTap,
         keyboardType: keyboardType,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         autofocus: autoFocus,

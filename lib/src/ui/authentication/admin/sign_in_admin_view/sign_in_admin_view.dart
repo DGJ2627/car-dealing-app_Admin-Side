@@ -28,7 +28,7 @@ class SignInAdminView extends StatelessWidget {
         final emailController = TextEditingController();
         final passwordController = TextEditingController();
         return Scaffold(
-          resizeToAvoidBottomInset: false,
+          //resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(

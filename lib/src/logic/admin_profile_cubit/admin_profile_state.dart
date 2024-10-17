@@ -1,10 +1,24 @@
 part of 'admin_profile_cubit.dart';
 
-sealed class AdminProfileState extends Equatable {
-  const AdminProfileState();
-}
+class AdminProfileState extends Equatable {
+  final bool isLoggedIn;
+  final bool isLoading;
+  final AdminDataModel? adminDataModel;
+  const AdminProfileState(
+      {required this.isLoggedIn, required this.isLoading, this.adminDataModel});
 
-final class AdminProfileInitial extends AdminProfileState {
+  AdminProfileState copyWith({
+    bool? isLoggedIn,
+    bool? isLoading,
+    AdminDataModel? adminDataModel,
+  }) {
+    return AdminProfileState(
+      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
+      isLoading: isLoading ?? this.isLoggedIn,
+      adminDataModel: adminDataModel ?? this.adminDataModel,
+    );
+  }
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isLoggedIn, isLoading];
 }

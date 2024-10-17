@@ -44,7 +44,8 @@ class _SignUpFormState extends State<SignUpForm> {
             fieldName: "Full Name",
             labelText: "Full Name",
             isReadOnly: false,
-            validator: (value) => textFieldValidator('fulName', value),
+            validator: (value) =>
+                InputValidator.textFieldValidator(FieldType.fullName, value),
             autoFocus: false,
             prefixIcon: const Icon(Iconsax.user),
             obscureText: false,
@@ -57,7 +58,8 @@ class _SignUpFormState extends State<SignUpForm> {
             obscureText: false,
             keyboardType: TextInputType.emailAddress,
             isReadOnly: false,
-            validator: (value) => textFieldValidator('email', value),
+            validator: (value) =>
+                InputValidator.textFieldValidator(FieldType.email, value),
             autoFocus: false,
             prefixIcon: const Icon(Iconsax.sms),
           ),
@@ -68,7 +70,8 @@ class _SignUpFormState extends State<SignUpForm> {
             labelText: "Password",
             keyboardType: TextInputType.visiblePassword,
             isReadOnly: false,
-            validator: (value) => textFieldValidator('password', value),
+            validator: (value) =>
+                InputValidator.textFieldValidator(FieldType.password, value),
             autoFocus: false,
             obscureText: isEye ? false : true,
             prefixIcon: const Icon(Iconsax.lock),
@@ -89,7 +92,8 @@ class _SignUpFormState extends State<SignUpForm> {
             labelText: "contactNumber",
             keyboardType: TextInputType.phone,
             isReadOnly: false,
-            validator: (value) => textFieldValidator('contactNumber', value),
+            validator: (value) => InputValidator.textFieldValidator(
+                FieldType.contactNumber, value),
             autoFocus: false,
             prefixIcon: const Icon(Iconsax.mobile),
           ),

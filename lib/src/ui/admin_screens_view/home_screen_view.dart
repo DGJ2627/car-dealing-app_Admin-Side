@@ -3,6 +3,7 @@ import 'package:car_dekho_app/src/packages/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomeScreenView extends StatelessWidget {
@@ -45,16 +46,20 @@ class HomeScreenView extends StatelessWidget {
                           children: [
                             const Gap(6),
                             Container(
+                              alignment: AlignmentDirectional.center,
                               height: 30,
                               width: 30,
                               decoration: const BoxDecoration(
                                 color: AppColors.primaryColor,
                                 shape: BoxShape.circle,
                               ),
+                              child: const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedLocation01,
+                                  color: AppColors.blackColor),
                             ),
                             const Gap(4),
                             Text(
-                              "User",
+                              "Location",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall!

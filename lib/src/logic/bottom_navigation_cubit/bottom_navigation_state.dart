@@ -4,11 +4,7 @@ class BottomNavigationState extends Equatable {
   final int currentIndex;
   final List<Widget> screen = [
     const HomeScreenView(),
-    Container(
-      height: 100,
-      width: 100,
-      color: Colors.yellow,
-    ),
+    const ShowroomScreenView(),
     Container(
       height: 100,
       width: 100,
@@ -16,7 +12,7 @@ class BottomNavigationState extends Equatable {
     ),
     const AdminProfileScreenView(),
   ];
-  final List<String> screenName = ["Home", "Showroom", "Car", "Profile"];
+  final List<String> screenName = ["Home", "Showroom", "Vehicle", "Profile"];
   final List screenIcon = [
     HugeIcons.strokeRoundedHome01,
     HugeIcons.strokeRoundedCar01,
@@ -33,8 +29,3 @@ class BottomNavigationState extends Equatable {
     return BottomNavigationState(currentIndex: currentIndex);
   }
 }
-
-/*    Iconsax.home,
-    Iconsax.shop,
-    Iconsax.car,
-    Iconsax.user*/
