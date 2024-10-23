@@ -3,33 +3,24 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../interceptors/admin/admin_interceptors.dart';
+import '../../services/notification_permission/permission.dart';
 
 part 'home_screen_state.dart';
 
 class HomeScreenCubit extends Cubit<HomeScreenState> {
   HomeScreenCubit()
-      : super(const HomeScreenState(isLoading: true, isLoggedIn: false));
+      : super(const HomeScreenState(isLoading: true, isLoggedIn: false)) {
+    _getLocation();
+  }
 
   final DioInterceptors dio = DioInterceptors();
 
-  // Future<void> fetchAdminData() async {
-  //   try {
-  //     final response = await dio.get(endPoint: ApiEndPoints.fetchAdminData);
-  //     if (response.statusCode == 200) {
-  //       final adminData = (response.data as Map<String, dynamic>);
-  //       Log.success("Admin Data :- $adminData");
-  //       emit(state.copyWith(
-  //           isLoading: false,
-  //           isLoggedIn: true,
-  //           adminDataModel: AdminDataModel.fromJson(adminData)));
-  //     } else {
-  //       Log.error(
-  //           "Other Status Code From Get Admin API :- ${response.statusCode} \n $response");
-  //       emit(state.copyWith(isLoading: true, isLoggedIn: false));
-  //     }
-  //   } catch (e) {
-  //     Log.error("Error From Get Admin API :- $e");
-  //     emit(state.copyWith(isLoading: true, isLoggedIn: false));
-  //   }
-  // }
+  Future<void> _getLocation() async {
+    String location = await AppPermissions.getCurrentLocation("Your location");
+    emit(state.copyWith(location: location, isLoading: false));
+  }
+
+  void showLocationContainer(bool isLocationShow) {
+    isLocationShow != isLocationShow;
+  }
 }

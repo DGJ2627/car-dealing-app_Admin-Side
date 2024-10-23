@@ -1,14 +1,13 @@
 import 'dart:io';
-
 import 'package:car_dekho_app/src/packages/domain/model/brand_list_model/brand_list_data.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../interceptors/admin/admin_interceptors.dart';
+import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
 import '../../packages/domain/model/showroom_add_model/showroom_add_model.dart';
 import '../../utils/logger.dart';
 
@@ -16,7 +15,9 @@ part 'add_showroom_state.dart';
 
 class AddShowroomCubit extends Cubit<AddShowroomState> {
   AddShowroomCubit()
-      : super(const AddShowroomState(isLogged: false, isLoading: true));
+      : super(const AddShowroomState(isLogged: false, isLoading: true)) {
+    fetchBrandNameList();
+  }
 
   final DioInterceptors dio = DioInterceptors();
 
@@ -25,6 +26,7 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
   Future<void> addShowRoomDetailsFunction(
       {required ShowroomDataAddModel showroomModel,
       required BuildContext context}) async {
+    emit(state.copyWith(isLogged: true));
     try {
       final response = await dio.post(
         endPoint: ApiEndPoints.addShowroom,
@@ -111,10 +113,10 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
       try {
         if (response.statusCode == 200) {
           String documentID = response.data['result'].toString();
-          AppConstants.uploadDocumentID(documentID);
+          LocalString.uploadDocumentID(documentID);
 
           //==============================================================//
-          String? adminDoc = await AppConstants.getUploadDocumentID();
+          String? adminDoc = await LocalString.getUploadDocumentID();
           Log.success("Doc :- $adminDoc");
         } else {
           Log.info(
@@ -128,22 +130,122 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
       //Navigator.pop(context);
     }
   }
+
+  Future<void> deleteBrandListFunction(String? brandID) async {
+    try {
+      final deleteShowroomList =
+          state.brandListDataModel!.firstWhere((item) => item.id == brandID);
+
+      final response = await dio
+          .delete(endPoint: ApiEndPoints.deleteShowroom, queryParameters: {
+        'brandId': brandID,
+      });
+
+      if (response.statusCode == 200) {
+        state.brandListDataModel!.removeWhere((item) => item.id == brandID);
+
+        final index = state.brandListDataModel!.indexOf(deleteShowroomList);
+        if (index != -1) {
+          state.brandListDataModel![index];
+        }
+
+        emit(state.copyWith(
+          isLoading: false,
+          isLogged: true,
+          brandListDataModel: state.brandListDataModel!,
+        ));
+      } else {
+        Log.info(
+            "deleteBrandListFunction Other status Code: -\n ${response.statusCode} \n ${response.data}");
+      }
+      emit(state.copyWith(
+        isLoading: false,
+        isLogged: true,
+      ));
+    } catch (e) {
+      Log.error("deleteBrandListFunction :- $e");
+      Log.error("deleteBrandListFunction :- ${e.toString()}");
+      emit(state.copyWith(isLoading: true, isLogged: false));
+    }
+  }
 }
 
 /*
+class AddShowroomCubit extends Cubit<AddShowroomState> {
+  AddShowroomCubit()
+      : super(const AddShowroomState(isLogged: false, isLoading: true)) {
+    _brandNameListStreamController = StreamController<List<BrandListDataModel>>();
+    _brandNameListStream = _brandNameListStreamController.stream;
+    fetchBrandNameList();
+  }
 
-// In your widget or Cubit/Bloc:
-final dioInterceptors = DioInterceptors();
+  final DioInterceptors dio = DioInterceptors();
 
-// ... get imageFile from file picker or other source ...
+  late StreamController<List<BrandListDataModel>> _brandNameListStreamController;
+  late Stream<List<BrandListDataModel>> _brandNameListStream;
 
-dioInterceptors.postWithImage(
-  endPoint: ApiEndPoints.yourEndpoint,
-  data: {
-    'otherField1': 'value1',
-    'otherField2': 'value2',
-  },
-  imageFile: imageFile,
-  imageFieldName: 'image', // Adjust field name as per your API
-);
+  Stream<List<BrandListDataModel>> get brandNameListStream => _brandNameListStream;
+
+  // ... (other methods) ...
+
+  Future<void> fetchBrandNameList() async {
+    try {final response = await dio.get(
+        endPoint: ApiEndPoints.showBrandList,
+      );
+      if (response.statusCode == 200) {
+        final brandNameListData = (response.data as List)
+            .map((e) => BrandListDataModel.fromJson(e))
+            .toList();
+        _brandNameListStreamController.add(brandNameListData);
+        Log.success("brandNameListData :- $brandNameListData");
+      }
+    } catch (e) {
+      Log.error("Error From Get fetchBrandNameList API :- $e");
+      emit(state.copyWith(isLoading: true, isLogged: false));
+    }
+  }
+
+  // ... (other methods) ...
+
+  @override
+  Future<void> close() {
+    _brandNameListStreamController.close();
+    return super.close();
+  }
+}
+
+
+@override
+Widget build(BuildContext context) {
+  return BlocBuilder<AddShowroomCubit, AddShowroomState>(
+    builder: (context, state) {
+      // ... (other code) ...
+
+      return Scaffold(
+        // ... (other code) ...
+
+        Expanded(
+          child: StreamBuilder<List<BrandListDataModel>>(
+            stream: context.read<AddShowroomCubit>().brandNameListStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return AddShowroomFormWidget(
+                  // ... (other parameters) ...
+                  brandListModel: snapshot.data!, // Use snapshot.data
+                  // ... (other parameters) ...
+                );
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
+
+        // ... (other code) ...
+      );
+    },
+  );
+}
  */

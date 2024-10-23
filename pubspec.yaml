@@ -52,6 +52,10 @@ dependencies:
   toastification:
   geolocator:
   geocoding:
+  flutter_rating_stars:
+  carousel_slider:
+  shimmer:
+
 
 dev_dependencies:
   flutter_test:

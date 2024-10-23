@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../interceptors/admin/admin_interceptors.dart';
+import '../../../../packages/data/local/shared_preferences/shared_preferences_database.dart';
 import '../../../../packages/resources/app_constants.dart';
 import '../../../../utils/logger.dart';
 
@@ -32,7 +33,7 @@ class SignInCubit extends Cubit<SignInState> {
         String token = response.data['token'];
 
         //save admin token
-        AppConstants.storeAdminToken(token);
+        LocalString.storeAdminToken(token);
         emit(state.copyWith(isLoading: false, isLoggedIn: true));
 
         //navigate in home screen

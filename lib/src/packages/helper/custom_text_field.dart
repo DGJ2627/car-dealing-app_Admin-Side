@@ -52,6 +52,7 @@ class CustomTextField extends StatelessWidget {
         readOnly: isReadOnly,
         textInputAction: textInputAction,
         onTapOutside: (event) => FocusScope.of(context).unfocus(),
+        cursorColor: Colors.black,
         decoration: InputDecoration(
           hintText: hintText,
           labelText: fieldName,

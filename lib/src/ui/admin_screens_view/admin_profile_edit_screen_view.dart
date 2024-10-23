@@ -31,8 +31,8 @@ class AdminProfileEditScreenView extends StatelessWidget {
     final contactNumberController = TextEditingController();
 
     Log.debug(adminData);
-    nameController.text = adminData.fullName;
-    contactNumberController.text = adminData.contactNumber.toString();
+    nameController.text = adminData.fullName ?? "";
+    contactNumberController.text = adminData.contactNumber.toString() ?? "";
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -120,39 +120,40 @@ class AdminProfileEditScreenView extends StatelessWidget {
                   ),
                   const Gap(50),
                   Center(
-                      child: SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        int a = int.parse(contactNumberController.text);
-                        Log.debug(a);
-                        if (globalKey.currentState!.validate()) {
-                          context
-                              .read<AdminProfileEditCubit>()
-                              .adminDetailsUpdate(nameController.text,
-                                  int.parse(contactNumberController.text));
-                          Log.debug(nameController);
-                          Log.debug(contactNumberController);
-                        }
-                      },
-                      style: const ButtonStyle(
-                        elevation: WidgetStatePropertyAll(1),
-                        backgroundColor: WidgetStatePropertyAll(
-                          AppColors.secondaryColor,
+                    child: SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          int a = int.parse(contactNumberController.text);
+                          Log.debug(a);
+                          if (globalKey.currentState!.validate()) {
+                            context
+                                .read<AdminProfileEditCubit>()
+                                .adminDetailsUpdate(nameController.text,
+                                    int.parse(contactNumberController.text));
+                            Log.debug(nameController);
+                            Log.debug(contactNumberController);
+                          }
+                        },
+                        style: const ButtonStyle(
+                          elevation: WidgetStatePropertyAll(1),
+                          backgroundColor: WidgetStatePropertyAll(
+                            AppColors.secondaryColor,
+                          ),
+                        ),
+                        child: Text(
+                          "Save",
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    color: AppColors.primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                  ),
                         ),
                       ),
-                      child: Text(
-                        "Save",
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                ),
-                      ),
                     ),
-                  ))
+                  ),
                 ],
               ),
             ),

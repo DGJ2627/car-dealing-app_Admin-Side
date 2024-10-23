@@ -16,8 +16,8 @@ class ShowroomListDataModel extends Equatable {
   final String brand;
   final int status;
   final String admin;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String createdAt;
+  final String updatedAt;
   @JsonKey(name: '__v')
   final int v;
   final String brandName;
@@ -69,8 +69,8 @@ class ShowroomListDataModel extends Equatable {
     String? brand,
     int? status,
     String? admin,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    String? createdAt,
+    String? updatedAt,
     int? v,
     String? brandName,
   }) {

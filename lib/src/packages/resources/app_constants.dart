@@ -1,4 +1,4 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
 abstract interface class AppConstants {
   static final emailPatternRegExp = RegExp(
@@ -11,62 +11,97 @@ abstract interface class AppConstants {
   static final userNamePatternRegExp = RegExp('[a-zA-Z]');
 
   static final licenseNoPatternRegExp = RegExp(r'^[a-zA-Z]{5}[0-9]{5}$');
-  static const String baseUrl =
-      "https://f5f2-2405-201-200c-6876-dc0b-bb4a-7428-bd41.ngrok-free.app";
 
-  static storeAdminToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  // base url
+  static const String baseUrl = "https://4495-49-36-83-135.ngrok-free.app";
 
-    await prefs.setString('auth_token', token);
+  static String formatPriceInLakhsAndCrores(int price) {
+    if (price >= 10000000) {
+      final crores = price / 10000000.0;
+      return '${crores.toStringAsFixed(2)} Crores';
+    } else if (price >= 100000) {
+      final lakhs = price / 100000.0;
+      return '${lakhs.toStringAsFixed(2)} Lakhs';
+    } else {
+      return '₹$price';
+    }
   }
 
-  static Future<String?> getCurrentAdminToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('auth_token');
+  static String findingDiscount(String originalPrice, String discountedPrice) {
+    double discountAmount =
+        double.parse(originalPrice) - double.parse(discountedPrice);
+
+    double discountPercentage =
+        (discountAmount / double.parse(originalPrice)) * 100;
+    return discountPercentage.toString();
   }
 
-  static uploadDocumentID(String documentID) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  static Map<String, dynamic> extractFormData(
+      List<Map<String, dynamic>> fields, Map<String, String> fieldMapping) {
+    final data = <String, dynamic>{};
 
-    await prefs.setString('documentID', documentID);
-  }
+    for (final field in fields) {
+      final fieldName = field['fieldName'] as String;
+      final fieldController = field['fieldController'] as TextEditingController;
+      final modelProperty = fieldMapping[fieldName];
 
-  static Future<String?> getUploadDocumentID() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('documentID');
-  }
+      if (modelProperty != null) {
+        if (modelProperty == 'orignalPrice' || modelProperty == 'quantity') {
+          data[modelProperty] =
+              int.tryParse(fieldController.text) ?? 0; // Handle parsing errors
+        } else {
+          data[modelProperty] = fieldController.text;
+        }
+      }
+    }
 
-  static uploadBrandID(String uploadBrandID) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString('uploadBrandID', uploadBrandID);
-  }
-
-  static Future<String?> getUploadBrandID() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('uploadBrandID');
-  }
-
-  static Future<void> clearDocAndBrandName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('documentID');
-    await prefs.remove('uploadBrandID');
-  }
-
-  static Future<void> clearAllSharedPreferencesData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    return data;
   }
 }
 
 abstract interface class ApiEndPoints {
+  // login and sing up
   static const adminSignUp = '/registerAdmin';
   static const adminSignIn = '/adminLogin';
+
+  //=================================================//
+
+  // Admin data api
   static const fetchAdminData = '/adminDetails';
   static const updateAdminData = '/updateAdminProfile';
+  static const logoutAdminData = '/deleteAdmin';
+
+  //=================================================//
+
+  // showroom api
   static const addShowroom = '/addShowroom';
   static const getShowroomList = '/showroomList';
+  static const getShowroomDetails = '/showroomDetails';
   static const addBrand = '/addBrand';
   static const showBrandList = '/brandList';
   static const uploadShowroomDoc = '/uploadShowroomDocuments';
+  static const updateShowroomDoc = '/updateShowroomDetails';
+  static const deleteShowroom = '/deleteShowroom';
+
+  //=================================================//
+
+  // vehicle api
+  static const getVehicleListData = '/adminvehicleList';
+  static const addVehiclesData = '/addVehicles';
+  static const uploadVehicleImage = '/uploadVehiclePhoto';
+  static const getVehicleImage =
+      '${AppConstants.baseUrl}/uploads/vehiclesPhoto/';
+
+  static const vehicleDetails = "/vehicleDetails";
+  static const updateVehicleDetails = "/updateVehicleDetails";
+  static const deleteVehicle = "/deleteVehicle";
+  static const userOrderVehicleList = "/userOrderList";
+
+//=================================================//
+
+// user document verify api
+  static const userDocumentVerify = "/userDetails";
+  static const verifyDocuments = "/verifyDocuments";
+
+//=================================================//
 }

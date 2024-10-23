@@ -5,11 +5,7 @@ class BottomNavigationState extends Equatable {
   final List<Widget> screen = [
     const HomeScreenView(),
     const ShowroomScreenView(),
-    Container(
-      height: 100,
-      width: 100,
-      color: Colors.green,
-    ),
+    const VehicleScreenView(),
     const AdminProfileScreenView(),
   ];
   final List<String> screenName = ["Home", "Showroom", "Vehicle", "Profile"];

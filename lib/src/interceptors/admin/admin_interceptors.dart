@@ -4,6 +4,8 @@ import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:car_dekho_app/src/utils/logger.dart';
 import 'package:dio/dio.dart';
 
+import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
+
 class DioInterceptors extends Interceptor {
   Dio dio = Dio();
 
@@ -12,7 +14,7 @@ class DioInterceptors extends Interceptor {
   }
 
   void _initializeDio() async {
-    String? token = await AppConstants.getCurrentAdminToken();
+    String? token = await LocalString.getCurrentAdminToken();
     Log.debug("API TOKEN == $token");
     dio = Dio(
       BaseOptions(
@@ -26,6 +28,7 @@ class DioInterceptors extends Interceptor {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
+          Log.debug('Request[${options.method}] => PATH: ${options.path}');
           Log.debug('Request[${options.method}] => PATH: ${options.path}');
           return handler.next(options);
         },
@@ -49,7 +52,7 @@ class DioInterceptors extends Interceptor {
     required String endPoint,
     required Map<String, dynamic> data,
   }) async {
-    String? adminToken = await AppConstants.getCurrentAdminToken();
+    String? adminToken = await LocalString.getCurrentAdminToken();
     try {
       return await dio.post(
         endPoint,
@@ -64,12 +67,14 @@ class DioInterceptors extends Interceptor {
     }
   }
 
-  Future<Response> get({required String endPoint}) async {
-    String? adminToken = await AppConstants.getCurrentAdminToken();
+  Future<Response> get(
+      {required String endPoint, Map<String, dynamic>? queryParameters}) async {
+    String? adminToken = await LocalString.getCurrentAdminToken();
     Log.debug("GET API Token : === $adminToken");
     try {
       return await dio.get(
         endPoint,
+        queryParameters: queryParameters,
         options: Options(headers: {
           'Authorization': 'Bearer $adminToken',
         }),
@@ -84,10 +89,7 @@ class DioInterceptors extends Interceptor {
     required String endPoint,
     required Map<String, dynamic> data,
   }) async {
-    String? adminToken = await AppConstants.getCurrentAdminToken();
-    Log.log("====================");
-    Log.error(adminToken);
-    Log.log("====================");
+    String? adminToken = await LocalString.getCurrentAdminToken();
     try {
       return await dio.patch(
         endPoint,
@@ -104,11 +106,10 @@ class DioInterceptors extends Interceptor {
 
   Future<Response> postWithImage({
     required String endPoint,
-    //required Map<String, dynamic> data,
     required File imageFile,
     required String imageFieldName,
   }) async {
-    String? adminToken = await AppConstants.getCurrentAdminToken();
+    String? adminToken = await LocalString.getCurrentAdminToken();
     try {
       FormData formData = FormData();
       formData.files.add(
@@ -141,45 +142,23 @@ class DioInterceptors extends Interceptor {
       throw Exception("Failed to call API: $e");
     }
   }
-}
 
-/*
-
-import 'package:dio/dio.dart';
-import 'dart:io';
-
-Future<void> uploadImage({
-  required String url,
-  required String filePath,
-}) async {
-  var dio = Dio();
-
-  try {
-    // Create form data
-    FormData formData = FormData.fromMap({
-      'image': await MultipartFile.fromFile(filePath, filename: filePath.split('/').last),
-    });
-
-    // Send POST request
-    var response = await dio.post(
-      url,
-      data: formData,
-      options: Options(
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      ),
-    );
-
-    // Handle the response
-    if (response.statusCode == 200) {
-      print('Image uploaded successfully');
-    } else {
-      print('Failed to upload image');
+  Future<Response> delete({
+    required String endPoint,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    String? adminToken = await LocalString.getCurrentAdminToken();
+    try {
+      return await dio.delete(
+        endPoint,
+        options: Options(headers: {
+          'Authorization': 'Bearer $adminToken',
+        }),
+        queryParameters: queryParameters,
+      );
+    } on DioException catch (e) {
+      Log.debug(e);
+      throw Exception("Failed to call API :- $e");
     }
-  } catch (e) {
-    print('Error uploading image: $e');
   }
 }
-
- */

@@ -5,12 +5,13 @@ import '../packages/resources/colors.dart';
 abstract class AppTheme {
   static const defaultFontFamily = "Roboto";
   static ThemeData appTheme = ThemeData(
-      fontFamily: defaultFontFamily,
-      primaryColor: AppColors.primaryColor,
-      useMaterial3: true,
-      brightness: Brightness.light,
-      appBarTheme: const AppBarTheme(color: AppColors.primaryColor),
-      textTheme: _textTheme());
+    fontFamily: defaultFontFamily,
+    primaryColor: AppColors.primaryColor,
+    useMaterial3: true,
+    brightness: Brightness.light,
+    appBarTheme: const AppBarTheme(color: AppColors.primaryColor),
+    textTheme: _textTheme(),
+  );
 
   static TextTheme _textTheme() {
     return const TextTheme(

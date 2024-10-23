@@ -11,6 +11,20 @@ enum FieldType {
   location,
   verificationDocuments,
   brand,
+  showroomId,
+  carName,
+  type,
+  originalPrice,
+  warranty,
+  engine,
+  power,
+  photo,
+  transMission,
+  mileage,
+  specialFeature,
+  fuelType,
+  insurance,
+  quantity,
 }
 
 abstract interface class InputValidator {

@@ -18,8 +18,8 @@ ShowroomListDataModel _$ShowroomListDataModelFromJson(
       json['brand'] as String,
       (json['status'] as num).toInt(),
       json['admin'] as String,
-      DateTime.parse(json['createdAt'] as String),
-      DateTime.parse(json['updatedAt'] as String),
+      json['createdAt'] as String,
+      json['updatedAt'] as String,
       (json['__v'] as num).toInt(),
       json['brandName'] as String,
     );
@@ -36,8 +36,8 @@ Map<String, dynamic> _$ShowroomListDataModelToJson(
       'brand': instance.brand,
       'status': instance.status,
       'admin': instance.admin,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
       '__v': instance.v,
       'brandName': instance.brandName,
     };

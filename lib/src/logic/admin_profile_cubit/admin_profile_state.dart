@@ -4,8 +4,12 @@ class AdminProfileState extends Equatable {
   final bool isLoggedIn;
   final bool isLoading;
   final AdminDataModel? adminDataModel;
-  const AdminProfileState(
-      {required this.isLoggedIn, required this.isLoading, this.adminDataModel});
+
+  const AdminProfileState({
+    required this.isLoggedIn,
+    required this.isLoading,
+    this.adminDataModel,
+  });
 
   AdminProfileState copyWith({
     bool? isLoggedIn,

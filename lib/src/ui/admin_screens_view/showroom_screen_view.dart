@@ -4,10 +4,12 @@ import 'package:car_dekho_app/src/ui/admin_screens_view/showroom_details_screen_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:hugeicons/hugeicons.dart';
 
+import '../../components/app_custom_dialog_box.dart';
 import '../../packages/resources/colors.dart';
 
-class ShowroomScreenView extends StatefulWidget {
+class ShowroomScreenView extends StatelessWidget {
   static String routeName = "/ShowroomScreenView";
 
   const ShowroomScreenView({super.key});
@@ -20,49 +22,43 @@ class ShowroomScreenView extends StatefulWidget {
   }
 
   @override
-  State<ShowroomScreenView> createState() => _ShowroomScreenViewState();
-}
-
-class _ShowroomScreenViewState extends State<ShowroomScreenView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    context.read<ShowroomListCubit>().fetchShowroomListDataFunction();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShowroomListCubit, ShowroomListState>(
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColors.primaryColor,
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "Showroom",
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const Gap(20),
-                    Expanded(
-                      flex: 9,
-                      child: ListView.builder(
-                        itemCount: state.showroomListModel?.length ?? 0,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          final showroomData = state.showroomListModel![index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, ShowroomDetailsScreenView.routeName,
-                                  arguments: showroomData);
-                            },
-                            child: Padding(
+        if (state.isLoading) {
+          return const Scaffold(
+            backgroundColor: AppColors.primaryColor,
+            body: Center(child: Text("Data will Loading...")),
+          );
+        } else if (state.isLogged) {
+          final filteredShowroomList = state.showroomListModel!
+              .where((showroom) => showroom.status != 2)
+              .toList();
+          return Scaffold(
+            backgroundColor: AppColors.primaryColor,
+            body: SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Showroom",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: AppColors.blackColor),
+                      ),
+                      const Gap(20),
+                      Expanded(
+                        flex: 9,
+                        child: ListView.builder(
+                          itemCount: filteredShowroomList.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            final showroomData = filteredShowroomList[index];
+                            return Padding(
                               padding: const EdgeInsets.only(bottom: 10),
                               child: Container(
                                 height: 150,
@@ -77,74 +73,132 @@ class _ShowroomScreenViewState extends State<ShowroomScreenView> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "Showroom Name:- ${showroomData.showroomName}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                                color: AppColors.blackColor,
-                                                fontSize: 18),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Showroom Name:- ${showroomData.showroomName}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                                    color: AppColors.blackColor,
+                                                    fontSize: 18),
+                                          ),
+                                          const Gap(10),
+                                          Text(
+                                            "owner Name:- ${showroomData.ownerName}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                                  color: AppColors.blackColor,
+                                                ),
+                                          ),
+                                          const Gap(10),
+                                          Text(
+                                            "Location:- ${showroomData.location}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                                  color: AppColors.blackColor,
+                                                ),
+                                          ),
+                                          const Gap(10),
+                                        ],
                                       ),
-                                      const Gap(10),
-                                      Text(
-                                        "owner Name:- ${showroomData.ownerName}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                              color: AppColors.blackColor,
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            alignment:
+                                                AlignmentDirectional.center,
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color:
+                                                      AppColors.secondaryColor,
+                                                  width: 2),
                                             ),
-                                      ),
-                                      const Gap(10),
-                                      Text(
-                                        "Location:- ${showroomData.location}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                              color: AppColors.blackColor,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  ShowroomDetailsScreenView
+                                                      .routeName,
+                                                  arguments: showroomData.id,
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                HugeIcons.strokeRoundedEdit01,
+                                                size: 22,
+                                              ),
                                             ),
+                                          ),
+                                          Container(
+                                            alignment:
+                                                AlignmentDirectional.center,
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color:
+                                                      AppColors.secondaryColor,
+                                                  width: 2),
+                                            ),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                AppCustomDialogBox.logoutDialog(
+                                                  context: context,
+                                                  titleName:
+                                                      'You want Delete Showroom',
+                                                  logoutFunction: () async {
+                                                    context
+                                                        .read<
+                                                            ShowroomListCubit>()
+                                                        .deleteShowroomFunction(
+                                                            showroomData.id);
+                                                    state.showroomListModel!
+                                                        .removeAt(index);
+                                                  },
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                HugeIcons.strokeRoundedDelete01,
+                                                size: 22,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const Gap(10),
                                     ],
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          // floatingActionButton: Theme(
-          //   data: ThemeData(useMaterial3: false),
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          //     child: FloatingActionButton(
-          //       onPressed: () {
-          //         Navigator.pushNamed(context, AddShowroomScreenView.routeName);
-          //       },
-          //       child: const CircleAvatar(
-          //         radius: 40,
-          //         backgroundColor: AppColors.secondaryColor,
-          //         child: Icon(
-          //           Icons.add,
-          //           color: AppColors.primaryColor,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        );
+          );
+        }
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }

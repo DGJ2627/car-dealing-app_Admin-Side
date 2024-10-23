@@ -38,4 +38,29 @@ class AdminProfileCubit extends Cubit<AdminProfileState> {
   void updateAdminData(AdminDataModel newAdminData) {
     emit(state.copyWith(adminDataModel: newAdminData));
   }
+
+  Future<void> deleteAdminFunction() async {
+    try {
+      final response = await dio.delete(
+        endPoint: ApiEndPoints.logoutAdminData,
+      );
+      if (response.statusCode == 200) {
+        emit(state.copyWith(
+          isLoading: false,
+          isLoggedIn: true,
+        ));
+      } else {
+        Log.info(
+            "deleteAdminFunction Other status Code: -\n ${response.statusCode} \n ${response.data}");
+      }
+      emit(state.copyWith(
+        isLoading: false,
+        isLoggedIn: true,
+      ));
+    } catch (e) {
+      Log.error("deleteAdminFunction :- $e");
+      Log.error("deleteAdminFunction :- ${e.toString()}");
+      emit(state.copyWith(isLoading: true, isLoggedIn: false));
+    }
+  }
 }

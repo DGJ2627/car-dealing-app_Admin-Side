@@ -3,8 +3,8 @@ import 'package:car_dekho_app/src/logic/admin_profile_cubit/admin_profile_cubit.
 import 'package:car_dekho_app/src/logic/bottom_navigation_cubit/bottom_navigation_cubit.dart';
 import 'package:car_dekho_app/src/logic/home_screen_cubit/home_screen_cubit.dart';
 import 'package:car_dekho_app/src/logic/showroom_list_cubit/showroom_list_cubit.dart';
+import 'package:car_dekho_app/src/logic/vehicle_cubit/vehicle_cubit.dart';
 import 'package:car_dekho_app/src/packages/resources/colors.dart';
-import 'package:car_dekho_app/src/ui/admin_screens_view/showroom_screen_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -21,8 +21,9 @@ class BottomNavigationView extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => BottomNavigationCubit()),
         BlocProvider(create: (context) => HomeScreenCubit()),
-        BlocProvider(create: (context) => ShowroomListCubit(),),
+        BlocProvider(create: (context) => ShowroomListCubit()),
         BlocProvider(create: (context) => AdminProfileCubit()),
+        BlocProvider(create: (context) => VehicleCubit()),
       ],
       child: const BottomNavigationView(),
     );

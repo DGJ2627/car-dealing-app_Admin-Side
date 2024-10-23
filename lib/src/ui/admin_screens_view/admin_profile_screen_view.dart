@@ -1,10 +1,13 @@
+import 'package:car_dekho_app/src/components/app_custom_dialog_box.dart';
 import 'package:car_dekho_app/src/logic/admin_profile_cubit/admin_profile_cubit.dart';
 import 'package:car_dekho_app/src/packages/resources/colors.dart';
+import 'package:car_dekho_app/src/ui/authentication/admin/sign_in_admin_view/sign_in_admin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
 import '../../packages/domain/model/admin_data_model.dart';
 import 'admin_profile_edit_screen_view.dart';
 
@@ -61,7 +64,7 @@ class _AdminProfileScreenViewState extends State<AdminProfileScreenView> {
                               color: AppColors.blackColor),
                         ),
                         Text(
-                          state.adminDataModel?.fullName ?? "",
+                          state.adminDataModel?.fullName ?? "Loading",
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -104,7 +107,22 @@ class _AdminProfileScreenViewState extends State<AdminProfileScreenView> {
                     const Divider(height: 1.0),
                     const Gap(20),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        AppCustomDialogBox.logoutDialog(
+                          context: context,
+                          titleName: 'You want Logout',
+                          logoutFunction: () async {
+                            context
+                                .read<AdminProfileCubit>()
+                                .deleteAdminFunction();
+                            await LocalString.clearAllSharedPreferencesData();
+                            Navigator.pushReplacementNamed(
+                              context,
+                              SignInAdminView.routeName,
+                            );
+                          },
+                        );
+                      },
                       child: Container(
                         alignment: AlignmentDirectional.centerStart,
                         height: 60,

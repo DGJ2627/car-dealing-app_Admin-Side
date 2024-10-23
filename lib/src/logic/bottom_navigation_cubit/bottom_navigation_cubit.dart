@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../ui/admin_screens_view/admin_profile_screen_view.dart';
+import '../../ui/admin_screens_view/vehicle_screen_view.dart';
 
 part 'bottom_navigation_state.dart';
 
