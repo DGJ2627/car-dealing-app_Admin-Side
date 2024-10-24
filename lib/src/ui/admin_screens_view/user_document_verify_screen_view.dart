@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hugeicons/hugeicons.dart';
-
 import '../../components/app_custom_dialog_box.dart';
-import '../../packages/domain/model/user_document_verify_model/user_document_verify_model.dart';
 import '../../packages/resources/colors.dart';
 
 class UserDocumentVerifyScreenView extends StatelessWidget {

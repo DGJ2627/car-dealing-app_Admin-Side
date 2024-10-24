@@ -13,9 +13,11 @@ class VehicleShowWidget extends StatelessWidget {
   const VehicleShowWidget({
     super.key,
     required this.vehicleListData,
+    required this.deleteList,
   });
 
   final VehicleDataModel vehicleListData;
+  final List<VehicleDataModel> deleteList;
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +122,10 @@ class VehicleShowWidget extends StatelessWidget {
                       .then(
                     (value) {
                       if (value != null && value == vehicleListData.id) {
-                        Log.debug("Delete Vehicle Data Successful ");
+                        Log.debug("Delete Vehicle Data Successful $value");
+                        deleteList.removeWhere(
+                          (element) => element.id == value,
+                        );
                       }
                     },
                   );

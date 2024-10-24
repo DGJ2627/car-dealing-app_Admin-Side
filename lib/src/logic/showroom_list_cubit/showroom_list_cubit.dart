@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:car_dekho_app/src/packages/domain/model/showroom_list_model/showroom_list_model.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../interceptors/admin/admin_interceptors.dart';
 import '../../utils/logger.dart';
 
@@ -13,7 +14,6 @@ class ShowroomListCubit extends Cubit<ShowroomListState> {
       : super(const ShowroomListState(isLogged: false, isLoading: true)) {
     fetchShowroomListDataFunction();
   }
-
   final DioInterceptors dio = DioInterceptors();
 
   Future<void> fetchShowroomListDataFunction() async {
@@ -28,11 +28,6 @@ class ShowroomListCubit extends Cubit<ShowroomListState> {
         List<ShowroomListDataModel> showroom =
             showroomListData.where((e) => e.status != 2).toList();
         Log.debug(showroom);
-        // if (showroom.isNotEmpty) {
-        //   for (final a in showroom) {
-        //     Log.debug(a['showroomName'] as String);
-        //   }
-        // }
         emit(state.copyWith(
           isLoading: false,
           isLogged: true,
@@ -41,6 +36,7 @@ class ShowroomListCubit extends Cubit<ShowroomListState> {
       } else {
         Log.info(
             "fetchShowroomListDataFunction Other status Code: - ${response.statusCode} \n ${response.data}");
+        emit(state.copyWith(isLoading: true, isLogged: false));
       }
     } catch (e) {
       Log.error("Error From Get fetchShowroomListDataFunction API :- $e");

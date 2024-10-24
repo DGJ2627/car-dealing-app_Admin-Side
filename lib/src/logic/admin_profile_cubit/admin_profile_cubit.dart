@@ -1,16 +1,31 @@
+import 'dart:async';
+
+import 'package:car_dekho_app/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../interceptors/admin/admin_interceptors.dart';
 import '../../packages/domain/model/admin_data_model.dart';
 import '../../packages/resources/app_constants.dart';
+import '../../packages/resources/stream_subscription.dart';
 import '../../utils/logger.dart';
 
 part 'admin_profile_state.dart';
 
-class AdminProfileCubit extends Cubit<AdminProfileState> {
+class AdminProfileCubit extends Cubit<AdminProfileState>
+    with StreamSubscriptionMixin {
+  late StreamSubscription _userAddedSubscription;
+
   AdminProfileCubit()
-      : super(const AdminProfileState(isLoggedIn: false, isLoading: true));
+      : super(const AdminProfileState(isLoggedIn: false, isLoading: true)) {
+    fetchAdminData();
+    _userAddedSubscription =
+        eventBus.on<AdminProfileDetailsUpdateEvent>().listen(
+      (event) {
+        emit(state.copyWith(adminDataModel: event.adminDataModel));
+      },
+    );
+  }
 
   final DioInterceptors dio = DioInterceptors();
 
@@ -21,9 +36,10 @@ class AdminProfileCubit extends Cubit<AdminProfileState> {
         final adminData = (response.data as Map<String, dynamic>);
         Log.success("Admin Data :- $adminData");
         emit(state.copyWith(
-            adminDataModel: AdminDataModel.fromJson(adminData),
-            isLoading: false,
-            isLoggedIn: true));
+          adminDataModel: AdminDataModel.fromJson(adminData),
+          isLoading: false,
+          isLoggedIn: true,
+        ));
       } else {
         Log.error(
             "Other Status Code From Get Admin API :- ${response.statusCode} \n $response");
@@ -63,4 +79,16 @@ class AdminProfileCubit extends Cubit<AdminProfileState> {
       emit(state.copyWith(isLoading: true, isLoggedIn: false));
     }
   }
+
+  @override
+  Future<void> close() {
+    _userAddedSubscription.cancel();
+    return super.close();
+  }
+}
+
+class AdminProfileDetailsUpdateEvent {
+  final AdminDataModel adminDataModel;
+
+  AdminProfileDetailsUpdateEvent(this.adminDataModel);
 }

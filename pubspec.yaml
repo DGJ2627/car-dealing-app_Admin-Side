@@ -55,6 +55,7 @@ dependencies:
   flutter_rating_stars:
   carousel_slider:
   shimmer:
+  event_bus:
 
 
 dev_dependencies:

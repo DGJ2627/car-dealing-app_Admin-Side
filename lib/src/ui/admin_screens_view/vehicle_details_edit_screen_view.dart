@@ -31,7 +31,9 @@ class VehicleDetailsEditScreenView extends StatelessWidget {
       builder: (context, state) {
         if (state.isLoading) {
           final globalKey = GlobalKey<FormState>();
-
+          VehicleDetailsModel? vehicleModel = ModalRoute.of(context)!
+              .settings
+              .arguments as VehicleDetailsModel?;
           final originalPriceController = TextEditingController(
               text: state.vehicleDetailsModel!.orignalPrice.toString());
           final insuranceController =
@@ -98,18 +100,20 @@ class VehicleDetailsEditScreenView extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Map<String, dynamic> vehicleDetailsMap = {
-                              'vehicleId': state.vehicleDetailsModel!.id,
-                              'quantity': quantityController.text,
-                              'insurance': insuranceController.text,
-                              'orignalPrice': originalPriceController.text,
-                            };
+                            final vehicleDetailsMap = vehicleModel!.copyWith(
+                              id: state.vehicleDetailsModel!.id,
+                              quantity: int.parse(quantityController.text),
+                              insurance: insuranceController.text,
+                              orignalPrice:
+                                  int.parse(originalPriceController.text),
+                            );
                             Log.debug(
                                 "Update Vehicle Btn : $vehicleDetailsMap");
                             if (globalKey.currentState!.validate()) {
                               context
                                   .read<VehicleDetailsEditCubit>()
-                                  .updateVehicleDetails(vehicleDetailsMap);
+                                  .updateVehicleDetails(
+                                      state.vehicleDetailsModel!);
                             }
                           },
                           style: const ButtonStyle(

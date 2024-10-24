@@ -1,33 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'admin_data_model.dart';
+part of 'vehicle_test_ride_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AdminDataModel _$AdminDataModelFromJson(Map<String, dynamic> json) =>
-    AdminDataModel(
+VehicleTestRideModel _$VehicleTestRideModelFromJson(
+        Map<String, dynamic> json) =>
+    VehicleTestRideModel(
       id: json['_id'] as String,
-      fullName: json['fullName'] as String,
-      contactNumber: (json['contactNumber'] as num).toInt(),
-      email: json['email'] as String,
-      password: json['password'] as String,
-      role: json['role'] as String,
+      userId: json['userId'] as String,
+      vehicleId: json['vehicleId'] as String,
       status: (json['status'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       v: (json['__v'] as num).toInt(),
     );
 
-Map<String, dynamic> _$AdminDataModelToJson(AdminDataModel instance) =>
+Map<String, dynamic> _$VehicleTestRideModelToJson(
+        VehicleTestRideModel instance) =>
     <String, dynamic>{
       '_id': instance.id,
-      'fullName': instance.fullName,
-      'contactNumber': instance.contactNumber,
-      'email': instance.email,
-      'password': instance.password,
-      'role': instance.role,
+      'userId': instance.userId,
+      'vehicleId': instance.vehicleId,
       'status': instance.status,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),

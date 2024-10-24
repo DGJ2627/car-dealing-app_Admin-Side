@@ -1,4 +1,6 @@
+import 'package:car_dekho_app/main.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/vehicle_details_edit_screen_view.dart';
+import 'package:car_dekho_app/src/ui/admin_screens_view/vehicle_screen_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
@@ -18,8 +20,8 @@ class VehicleDetailsScreenView extends StatelessWidget {
   static Widget builder(BuildContext context) {
     String vehicleId = ModalRoute.of(context)!.settings.arguments as String;
     return BlocProvider(
-      create: (context) =>
-          VehicleDetailsCubit()..fetchVehicleDetailsFunction(vehicleId),
+      create: (context) => VehicleDetailsCubit(vehicleId: vehicleId)
+        ..fetchVehicleDetailsFunction(vehicleId),
       child: const VehicleDetailsScreenView(),
     );
   }
@@ -165,6 +167,8 @@ class VehicleDetailsScreenView extends StatelessWidget {
                                 .deleteShowroomFunction(
                                     state.vehicleDetailsModel!.id);
 
+                            eventBus.fire(DeleteVehicleEvent(
+                                state.vehicleDetailsModel!.id));
                             Navigator.pop(
                                 context, state.vehicleDetailsModel!.id);
                           },

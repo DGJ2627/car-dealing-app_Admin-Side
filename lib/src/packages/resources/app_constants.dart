@@ -13,7 +13,8 @@ abstract interface class AppConstants {
   static final licenseNoPatternRegExp = RegExp(r'^[a-zA-Z]{5}[0-9]{5}$');
 
   // base url
-  static const String baseUrl = "https://4495-49-36-83-135.ngrok-free.app";
+  static const String baseUrl =
+      "https://b798-2405-201-200c-6876-605c-d2dc-a439-48b.ngrok-free.app";
 
   static String formatPriceInLakhsAndCrores(int price) {
     if (price >= 10000000) {
@@ -102,6 +103,17 @@ abstract interface class ApiEndPoints {
 // user document verify api
   static const userDocumentVerify = "/userDetails";
   static const verifyDocuments = "/verifyDocuments";
+
+//=================================================//
+
+// vehicle Service api
+  static const userFreeServiceList = "/userServiceList";
+
+//=================================================//
+
+// userTestRideList  api
+  static const userVehicleTestRideList = "/userTestRideList";
+  static const userVehicleTestRideApproved = "/completeRide";
 
 //=================================================//
 }

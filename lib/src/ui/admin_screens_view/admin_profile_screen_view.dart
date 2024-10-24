@@ -73,16 +73,16 @@ class _AdminProfileScreenViewState extends State<AdminProfileScreenView> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context,
-                                    AdminProfileEditScreenView.routeName,
-                                    arguments: state.adminDataModel)
-                                .then((result) {
-                              if (result != null && result is AdminDataModel) {
-                                context
-                                    .read<AdminProfileCubit>()
-                                    .updateAdminData(result);
-                              }
-                            });
+                            Navigator.pushNamed(
+                                context, AdminProfileEditScreenView.routeName,
+                                arguments: state.adminDataModel);
+                            //     .then((result) {
+                            //   if (result != null && result is AdminDataModel) {
+                            //     context
+                            //         .read<AdminProfileCubit>()
+                            //         .updateAdminData(result);
+                            //   }
+                            // });
                           },
                           style: const ButtonStyle(
                               elevation: WidgetStatePropertyAll(0),

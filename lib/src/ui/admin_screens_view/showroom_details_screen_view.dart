@@ -232,45 +232,6 @@ class ShowroomDetailsScreenView extends StatelessWidget {
                         ),
                       ),
                       const Gap(30),
-                      Container(
-                        padding: const EdgeInsetsDirectional.symmetric(
-                            horizontal: 10),
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: AppColors.secondaryColor,
-                              width: 2,
-                            ),
-                            color: AppColors.primaryColor),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Brand Name:- ${state.showroomListModel?.brandName ?? ""}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                showUpdateAdminDetailsBottomSheet(
-                                  context,
-                                  state.showroomListModel!.id,
-                                  'brandName',
-                                  state.showroomListModel!.brandName,
-                                  cubit,
-                                  (value) => InputValidator.textFieldValidator(
-                                    FieldType.brand,
-                                    value,
-                                  ),
-                                );
-                              },
-                              icon: const Icon(HugeIcons.strokeRoundedEdit01),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Gap(30),
                     ],
                   )
                 ],
@@ -311,12 +272,11 @@ void showUpdateAdminDetailsBottomSheet(
   final fieldController = TextEditingController(text: textFieldValue);
   showModalBottomSheet(
     context: context,
-    isScrollControlled: true, // Allow the sheet to scroll if content is large
+    isScrollControlled: true,
     builder: (BuildContext context) {
       return Padding(
         padding: EdgeInsets.only(
-          bottom:
-              MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
+          bottom: MediaQuery.of(context).viewInsets.bottom,
           left: 16,
           right: 16,
           top: 16,
@@ -324,7 +284,7 @@ void showUpdateAdminDetailsBottomSheet(
         child: Form(
           key: globalKey,
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Take only the required space
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 "Update Details",
@@ -336,7 +296,7 @@ void showUpdateAdminDetailsBottomSheet(
               const Gap(20),
               CustomTextField(
                 fieldController: fieldController,
-                fieldName: 'ShowroomName',
+                fieldName: textFieldName,
                 autoFocus: false,
                 isReadOnly: false,
                 validator: validator,
@@ -378,142 +338,3 @@ void showUpdateAdminDetailsBottomSheet(
     },
   );
 }
-
-// void showUpdateAdminDetailsBottomSheet(BuildContext context,
-//     ShowroomListDataModel? updateDetails, ShowroomDetailsCubit cubit) {
-//   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-//   final showroomNameController =
-//       TextEditingController(text: updateDetails?.showroomName ?? "");
-//   final ownerNameController =
-//       TextEditingController(text: updateDetails?.ownerName ?? "");
-//   final licenseNumberController =
-//       TextEditingController(text: updateDetails?.licenseNumber ?? "");
-//   final locationNameController =
-//       TextEditingController(text: updateDetails?.location ?? "");
-//   showModalBottomSheet(
-//     context: context,
-//     isScrollControlled: true, // Allow the sheet to scroll if content is large
-//     builder: (BuildContext context) {
-//       return Padding(
-//         padding: EdgeInsets.only(
-//           bottom:
-//               MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
-//           left: 16,
-//           right: 16,
-//           top: 16,
-//         ),
-//         child: Form(
-//           key: globalKey,
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min, // Take only the required space
-//             children: [
-//               Text(
-//                 "Update Details",
-//                 style: Theme.of(context)
-//                     .textTheme
-//                     .titleLarge!
-//                     .copyWith(color: AppColors.blackColor),
-//               ),
-//               const Gap(20),
-//               CustomTextField(
-//                 fieldController: showroomNameController,
-//                 fieldName: 'ShowroomName',
-//                 autoFocus: false,
-//                 isReadOnly: false,
-//                 validator: (value) => InputValidator.textFieldValidator(
-//                   FieldType.showroomName,
-//                   value,
-//                 ),
-//                 obscureText: false,
-//               ),
-//               const Gap(20),
-//               CustomTextField(
-//                 fieldController: ownerNameController,
-//                 fieldName: 'OwnerName',
-//                 autoFocus: false,
-//                 isReadOnly: false,
-//                 validator: (value) => InputValidator.textFieldValidator(
-//                   FieldType.ownerName,
-//                   value,
-//                 ),
-//                 obscureText: false,
-//               ),
-//               const Gap(20),
-//               CustomTextField(
-//                 fieldController: licenseNumberController,
-//                 fieldName: 'LicenseNumber',
-//                 autoFocus: false,
-//                 isReadOnly: false,
-//                 validator: (value) => InputValidator.textFieldValidator(
-//                   FieldType.licenseNumber,
-//                   value,
-//                 ),
-//                 obscureText: false,
-//               ),
-//               const Gap(20),
-//               CustomTextField(
-//                 fieldController: locationNameController,
-//                 fieldName: 'Location',
-//                 autoFocus: false,
-//                 isReadOnly: false,
-//                 validator: (value) => InputValidator.textFieldValidator(
-//                   FieldType.location,
-//                   value,
-//                 ),
-//                 obscureText: false,
-//               ),
-//               const Gap(20),
-//               Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: 20),
-//                 child: SizedBox(
-//                   width: double.infinity,
-//                   child: ElevatedButton(
-//                     onPressed: () {
-//                       Map<String, dynamic> json = {
-//                         "_id": updateDetails?.id,
-//                         "showroomName": showroomNameController.text,
-//                         "ownerName": ownerNameController.text,
-//                         "licenseNumber": licenseNumberController.text,
-//                         "location": locationNameController.text,
-//                         "verificationDocuments":
-//                             updateDetails?.verificationDocuments,
-//                         "brand": updateDetails?.brand,
-//                         "status": updateDetails?.status,
-//                         "admin": updateDetails?.admin,
-//                         "createdAt": updateDetails?.createdAt,
-//                         "updatedAt": updateDetails?.updatedAt,
-//                         "__v": updateDetails?.v,
-//                         "brandName": updateDetails?.brandName,
-//                       };
-//
-//                       Log.debug("TextFields :-[ $json ]");
-//                       ShowroomListDataModel? updateShowroomDetails =
-//                           ShowroomListDataModel.fromJson(json);
-//                       cubit.updateShowroomDetails(updateShowroomDetails);
-//                       Navigator.pop(context);
-//                     },
-//                     style: const ButtonStyle(
-//                       elevation: WidgetStatePropertyAll(1),
-//                       backgroundColor: WidgetStatePropertyAll(
-//                         AppColors.secondaryColor,
-//                       ),
-//                     ),
-//                     child: Text(
-//                       "Save",
-//                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-//                             color: AppColors.primaryColor,
-//                             fontWeight: FontWeight.w500,
-//                             fontSize: 18,
-//                           ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               const Gap(20),
-//             ],
-//           ),
-//         ),
-//       );
-//     },
-//   );
-// }

@@ -1,18 +1,26 @@
+import 'dart:async';
+
+import 'package:car_dekho_app/main.dart';
 import 'package:car_dekho_app/src/interceptors/admin/admin_interceptors.dart';
 import 'package:car_dekho_app/src/packages/domain/model/vehicle_details_model/vehicle_details_model.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../packages/resources/stream_subscription.dart';
 import '../../utils/logger.dart';
+import '../vehicle_cubit/vehicle_cubit.dart';
 
 part 'vehicle_details_state.dart';
 
 class VehicleDetailsCubit extends Cubit<VehicleDetailsState> {
-  VehicleDetailsCubit()
-      : super(const VehicleDetailsState(isLoading: true, isLogged: false));
+  VehicleDetailsCubit({required this.vehicleId})
+      : super(const VehicleDetailsState(isLoading: true, isLogged: false)) {
+    fetchVehicleDetailsFunction(vehicleId);
+  }
 
   DioInterceptors dio = DioInterceptors();
+  final String vehicleId;
 
   Future<void> fetchVehicleDetailsFunction(String vehicleId) async {
     Log.success("vehicleId:-- $vehicleId");

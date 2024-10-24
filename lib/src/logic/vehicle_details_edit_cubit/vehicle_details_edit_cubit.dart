@@ -3,8 +3,10 @@ import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../main.dart';
 import '../../packages/domain/model/vehicle_details_model/vehicle_details_model.dart';
 import '../../utils/logger.dart';
+import '../vehicle_details_cubit/vehicle_details_cubit.dart';
 
 part 'vehicle_details_edit_state.dart';
 
@@ -23,13 +25,24 @@ class VehicleDetailsEditCubit extends Cubit<VehicleDetailsEditState> {
   }
 
   Future<void> updateVehicleDetails(
-      Map<String, dynamic> vehicleDetailsMap) async {
+      VehicleDetailsModel vehicleDetailsMap) async {
+    Log.debug("Update Cubit :- $vehicleDetailsMap");
     try {
       final response = await dio.patch(
-          endPoint: ApiEndPoints.updateVehicleDetails, data: vehicleDetailsMap);
+        endPoint: ApiEndPoints.updateVehicleDetails,
+        data: {
+          'vehicleId': vehicleDetailsMap.id,
+          'quantity': vehicleDetailsMap.quantity,
+          'insurance': vehicleDetailsMap.insurance,
+          'orignalPrice': vehicleDetailsMap.orignalPrice,
+        },
+      );
       if (response.statusCode == 200) {
         Log.success("updateVehicleDetails API :- ${response.data}");
-        emit(state.copyWith(isLoading: false, isLogged: true));
+        emit(state.copyWith(
+          isLoading: false,
+          isLogged: true,
+        ));
       }
     } catch (e) {
       Log.error("updateVehicleDetails Patch API $e");

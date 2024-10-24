@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'admin_data_model.g.dart';
 
 @JsonSerializable()
-class AdminDataModel {
+class AdminDataModel extends Equatable {
   @JsonKey(name: '_id')
   final String id;
   final String fullName;
@@ -17,17 +18,17 @@ class AdminDataModel {
   @JsonKey(name: '__v')
   final int v;
 
-  AdminDataModel(
-      this.id,
-      this.fullName,
-      this.contactNumber,
-      this.email,
-      this.password,
-      this.role,
-      this.status,
-      this.createdAt,
-      this.updatedAt,
-      this.v);
+  const AdminDataModel(
+      {required this.id,
+      required this.fullName,
+      required this.contactNumber,
+      required this.email,
+      required this.password,
+      required this.role,
+      required this.status,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.v});
 
   factory AdminDataModel.fromJson(Map<String, dynamic> json) =>
       _$AdminDataModelFromJson(json);
@@ -47,16 +48,31 @@ class AdminDataModel {
     int? v,
   }) {
     return AdminDataModel(
-      id ?? this.id,
-      fullName ?? this.fullName,
-      contactNumber ?? this.contactNumber,
-      email ?? this.email,
-      password ?? this.password,
-      role ?? this.role,
-      status ?? this.status,
-      createdAt ?? this.createdAt,
-      updatedAt ?? this.updatedAt,
-      v ?? this.v,
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      contactNumber: contactNumber ?? this.contactNumber,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      role: role ?? this.role,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      v: v ?? this.v,
     );
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        id,
+        fullName,
+        contactNumber,
+        email,
+        password,
+        role,
+        status,
+        createdAt,
+        updatedAt,
+        v,
+      ];
 }

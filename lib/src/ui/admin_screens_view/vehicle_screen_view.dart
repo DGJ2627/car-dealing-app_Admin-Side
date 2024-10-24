@@ -1,3 +1,4 @@
+import 'package:car_dekho_app/main.dart';
 import 'package:car_dekho_app/src/logic/vehicle_cubit/vehicle_cubit.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/add_vehicle_screen_view.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import '../../components/VehicleShowWidget.dart';
 import '../../packages/resources/colors.dart';
 import '../../utils/logger.dart';
 
-class VehicleScreenView extends StatelessWidget {
+class VehicleScreenView extends StatefulWidget {
   static String routeName = "/ShowroomScreenView";
 
   const VehicleScreenView({super.key});
@@ -21,10 +22,22 @@ class VehicleScreenView extends StatelessWidget {
   }
 
   @override
+  State<VehicleScreenView> createState() => _VehicleScreenViewState();
+}
+
+class _VehicleScreenViewState extends State<VehicleScreenView> {
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<VehicleCubit, VehicleState>(
       builder: (context, state) {
-        Log.debug(state.vehicleListModel?.length);
+        eventBus.on<DeleteVehicleEvent>().listen(
+          (event) {
+            state.vehicleListModel!.removeWhere(
+              (element) => element.id == event.listId,
+            );
+            setState(() {});
+          },
+        );
         if (state.isLoading) {
           return Scaffold(
             backgroundColor: AppColors.primaryColor,
@@ -37,12 +50,12 @@ class VehicleScreenView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Data will Loading...",
+                        "Vehicle Data is Loading",
                         style: Theme.of(context)
                             .textTheme
                             .titleLarge!
-                            .copyWith(fontSize: 20),
-                      ),
+                            .copyWith(color: AppColors.blackColor),
+                      )
                     ],
                   ),
                 ),
@@ -53,63 +66,6 @@ class VehicleScreenView extends StatelessWidget {
           final filteredShowroomList = state.vehicleListModel!
               .where((showroom) => showroom.status != 2)
               .toList();
-          // return filteredShowroomList.isEmpty
-          //     ? Scaffold(
-          //         backgroundColor: AppColors.primaryColor,
-          //         body: SafeArea(
-          //           child: Padding(
-          //             padding: const EdgeInsets.symmetric(
-          //                 horizontal: 20, vertical: 20),
-          //             child: Center(
-          //               child: Column(
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 children: [
-          //                   Text(
-          //                     "Add Vehicle in Showroom",
-          //                     style: Theme.of(context)
-          //                         .textTheme
-          //                         .titleLarge!
-          //                         .copyWith(fontSize: 20),
-          //                   ),
-          //                   const Gap(50),
-          //                   Padding(
-          //                     padding:
-          //                         const EdgeInsets.symmetric(horizontal: 20),
-          //                     child: SizedBox(
-          //                       height: 50,
-          //                       width: double.infinity,
-          //                       child: ElevatedButton(
-          //                         onPressed: () {
-          //                           Navigator.pushNamed(context,
-          //                               AddVehicleScreenView.routeName);
-          //                         },
-          //                         style: const ButtonStyle(
-          //                           elevation: WidgetStatePropertyAll(1),
-          //                           backgroundColor: WidgetStatePropertyAll(
-          //                             AppColors.secondaryColor,
-          //                           ),
-          //                         ),
-          //                         child: Text(
-          //                           "Add",
-          //                           style: Theme.of(context)
-          //                               .textTheme
-          //                               .titleMedium!
-          //                               .copyWith(
-          //                                 color: AppColors.primaryColor,
-          //                                 fontWeight: FontWeight.w600,
-          //                                 fontSize: 18,
-          //                               ),
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       )
-          //     :
 
           return Scaffold(
             backgroundColor: AppColors.primaryColor,
@@ -145,9 +101,31 @@ class VehicleScreenView extends StatelessWidget {
                             final vehicleListData = filteredShowroomList[index];
 
                             Log.debug(vehicleListData);
-                            return VehicleShowWidget(
-                              vehicleListData: vehicleListData,
-                            );
+                            return filteredShowroomList.isEmpty
+                                ? ElevatedButton(
+                                    style: const ButtonStyle(
+                                      elevation: WidgetStatePropertyAll(3),
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        AppColors.secondaryColor,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(context,
+                                          AddVehicleScreenView.routeName);
+                                    },
+                                    child: Text(
+                                      "Add Vehicle in Showroom",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                              color: AppColors.primaryColor),
+                                    ),
+                                  )
+                                : VehicleShowWidget(
+                                    vehicleListData: vehicleListData,
+                                    deleteList: filteredShowroomList,
+                                  );
                           },
                         ),
                       ),
@@ -162,4 +140,9 @@ class VehicleScreenView extends StatelessWidget {
       },
     );
   }
+}
+
+class DeleteVehicleEvent {
+  String listId;
+  DeleteVehicleEvent(this.listId);
 }

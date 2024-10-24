@@ -16,6 +16,7 @@ import '../../ui/admin_screens_view/user_service_list.dart';
 import '../../ui/admin_screens_view/vehicle_details_edit_screen_view.dart';
 import '../../ui/admin_screens_view/vehicle_details_screen_view.dart';
 import '../../ui/admin_screens_view/vehicle_screen_view.dart';
+import '../../ui/admin_screens_view/vehicle_test_ride_screen_view.dart';
 import '../../ui/authentication/admin/sign_up_admin_view/sign_up_admin_view.dart';
 
 class AppRoute {
@@ -41,5 +42,6 @@ class AppRoute {
             OrderVehicleListScreenView.builder,
         UserDocumentVerifyScreenView.routeName:
             UserDocumentVerifyScreenView.builder,
+        VehicleTestRideScreenView.routeName: VehicleTestRideScreenView.builder,
       };
 }

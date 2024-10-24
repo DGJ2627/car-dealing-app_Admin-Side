@@ -64,6 +64,60 @@ class VehicleDetailsModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$VehicleDetailsModelToJson(this);
 
+  VehicleDetailsModel copyWith({
+    String? id,
+    String? brandName,
+    String? showroomId,
+    String? adminId,
+    String? vehicleName,
+    int? type,
+    int? orignalPrice,
+    int? discountAmount,
+    int? finalPrice,
+    String? insurance,
+    int? rating,
+    int? stars,
+    String? engine,
+    String? power,
+    String? photo,
+    String? transMission,
+    String? fuelType,
+    String? mileage,
+    String? specialfeature,
+    int? status,
+    int? quantity,
+    String? createdAt,
+    String? updatedAt,
+    int? v,
+  }) {
+    return VehicleDetailsModel(
+      id: id ?? this.id,
+      brandName: brandName ?? this.brandName,
+      showroomId: showroomId ?? this.showroomId,
+      adminId: adminId ?? this.adminId,
+      vehicleName: vehicleName ?? this.vehicleName,
+      type: type ?? this.type,
+      orignalPrice: orignalPrice ?? this.orignalPrice,
+      discountAmount: discountAmount ?? this.discountAmount,
+      finalPrice: finalPrice ?? this.finalPrice,
+      insurance: insurance ?? this.insurance,
+      rating: rating ?? this.rating,
+      stars: stars ?? this.stars,
+      engine: engine ?? this.engine,
+      power: power ?? this.power,
+      photo: photo ?? this.photo,
+      transMission: transMission ?? this.transMission,
+      fuelType: fuelType ?? this.fuelType,
+      mileage: mileage ?? this.mileage,
+      specialfeature: specialfeature ?? this.specialfeature,
+      status: status ?? this.status,
+      quantity: quantity ?? this.quantity,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      v: v ?? this.v,
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,

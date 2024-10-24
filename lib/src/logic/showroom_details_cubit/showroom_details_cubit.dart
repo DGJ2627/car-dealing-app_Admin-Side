@@ -3,6 +3,7 @@ import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../main.dart';
 import '../../packages/domain/model/showroom_list_model/showroom_list_model.dart';
 import '../../utils/logger.dart';
 
@@ -56,6 +57,7 @@ class ShowroomDetailsCubit extends Cubit<ShowroomDetailsState> {
       );
       if (response.statusCode == 200) {
         emit(state.copyWith(isLoading: false, isLogged: true));
+
         Log.success("updateShowroomDetails :- ${state.showroomListModel}");
       } else {
         Log.info(
@@ -70,31 +72,4 @@ class ShowroomDetailsCubit extends Cubit<ShowroomDetailsState> {
       emit(state.copyWith(isLoading: true, isLogged: false));
     }
   }
-
-// Future<void> updateShowroomDetails(
-//     ShowroomListDataModel? updateDetails) async {
-//   Log.error("update ID :- ${updateDetails!.id}");
-//   try {
-//     final response = await dio.patch(
-//       endPoint: ApiEndPoints.updateShowroomDoc,
-//       data: {
-//         "_id": updateDetails.id,
-//         "showroomName": updateDetails.showroomName,
-//         "ownerName": updateDetails.ownerName,
-//         "licenseNumber": updateDetails.licenseNumber,
-//         "location": updateDetails.location,
-//       },
-//     );
-//     if (response.statusCode == 200) {
-//       emit(state.copyWith(isLoading: false, isLogged: true));
-//       Log.success("updateShowroomDetails :- ${state.showroomListModel}");
-//     } else {
-//       Log.info(
-//           "updateShowroomDetails Other status Code: - ${response.statusCode} \n ${response.data}");
-//     }
-//   } catch (e) {
-//     Log.error("showroomDetailsFunction :- $e");
-//     emit(state.copyWith(isLoading: true, isLogged: false));
-//   }
-// }
 }

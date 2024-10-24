@@ -2,6 +2,7 @@ import 'package:car_dekho_app/src/logic/home_screen_cubit/home_screen_cubit.dart
 import 'package:car_dekho_app/src/packages/resources/colors.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/user_document_verify_screen_view.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/user_service_list.dart';
+import 'package:car_dekho_app/src/ui/admin_screens_view/vehicle_test_ride_screen_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -291,7 +292,10 @@ class HomeScreenView extends StatelessWidget {
 
                         //Test Ride
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, VehicleTestRideScreenView.routeName);
+                          },
                           child: Container(
                             height: 200,
                             width: 200,

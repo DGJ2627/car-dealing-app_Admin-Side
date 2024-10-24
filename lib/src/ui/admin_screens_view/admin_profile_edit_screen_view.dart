@@ -26,13 +26,15 @@ class AdminProfileEditScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     final globalKey = GlobalKey<FormState>();
     final adminData =
-        ModalRoute.of(context)!.settings.arguments as AdminDataModel;
+        ModalRoute.of(context)!.settings.arguments as AdminDataModel?;
     final nameController = TextEditingController();
     final contactNumberController = TextEditingController();
 
     Log.debug(adminData);
-    nameController.text = adminData.fullName ?? "";
-    contactNumberController.text = adminData.contactNumber.toString() ?? "";
+    nameController.text = adminData?.fullName ?? "";
+    contactNumberController.text = adminData?.contactNumber.toString() ?? "";
+
+    Log.debug(adminData!);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -53,16 +55,17 @@ class AdminProfileEditScreenView extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             final updatedAdminDataModel = AdminDataModel(
-                              adminData.id,
-                              nameController.text,
-                              int.parse(contactNumberController.text),
-                              adminData.email,
-                              adminData.password,
-                              adminData.role,
-                              adminData.status,
-                              adminData.createdAt,
-                              adminData.updatedAt,
-                              adminData.v,
+                              id: adminData.id,
+                              fullName: nameController.text,
+                              contactNumber:
+                                  int.parse(contactNumberController.text),
+                              email: adminData.email,
+                              password: adminData.password,
+                              role: adminData.role,
+                              status: adminData.status,
+                              createdAt: adminData.createdAt,
+                              updatedAt: adminData.updatedAt,
+                              v: adminData.v,
                             );
                             Navigator.pop(context, updatedAdminDataModel);
                           },
@@ -128,10 +131,17 @@ class AdminProfileEditScreenView extends StatelessWidget {
                           int a = int.parse(contactNumberController.text);
                           Log.debug(a);
                           if (globalKey.currentState!.validate()) {
+                            // context
+                            //     .read<AdminProfileEditCubit>()
+                            //     .adminDetailsUpdate(nameController.text,
+                            //         int.parse(contactNumberController.text));
+                            final admin = adminData.copyWith(
+                                fullName: nameController.text,
+                                contactNumber:
+                                    int.parse(contactNumberController.text));
                             context
                                 .read<AdminProfileEditCubit>()
-                                .adminDetailsUpdate(nameController.text,
-                                    int.parse(contactNumberController.text));
+                                .adminDetailsUpdate(admin);
                             Log.debug(nameController);
                             Log.debug(contactNumberController);
                           }
