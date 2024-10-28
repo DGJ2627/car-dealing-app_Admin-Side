@@ -3,9 +3,11 @@ part of 'vehicle_cubit.dart';
 class VehicleState extends Equatable {
   final bool isLogged;
   final bool isLoading;
-  final List<VehicleDataModel>? vehicleListModel;
+  final List<VehicleDataModel> vehicleListModel;
   const VehicleState(
-      {required this.isLogged, required this.isLoading, this.vehicleListModel});
+      {required this.isLogged,
+      required this.isLoading,
+      required this.vehicleListModel});
 
   VehicleState copyWith({
     bool? isLogged,
@@ -15,7 +17,7 @@ class VehicleState extends Equatable {
     return VehicleState(
         isLogged: isLogged ?? this.isLogged,
         isLoading: isLoading ?? this.isLoading,
-        vehicleListModel: vehicleListModel ?? this.vehicleListModel);
+        vehicleListModel: vehicleListModel ?? List.from(this.vehicleListModel));
   }
 
   @override

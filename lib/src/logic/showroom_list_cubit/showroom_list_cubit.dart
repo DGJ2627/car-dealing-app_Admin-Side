@@ -1,7 +1,8 @@
 import 'dart:async';
-
+import 'package:car_dekho_app/main.dart';
 import 'package:car_dekho_app/src/packages/domain/model/showroom_list_model/showroom_list_model.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
+import 'package:car_dekho_app/src/packages/resources/stream_subscription.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../interceptors/admin/admin_interceptors.dart';
@@ -9,15 +10,24 @@ import '../../utils/logger.dart';
 
 part 'showroom_list_state.dart';
 
-class ShowroomListCubit extends Cubit<ShowroomListState> {
+class ShowroomListCubit extends Cubit<ShowroomListState>
+    with StreamSubscriptionMixin {
+  late StreamSubscription _userAddedSubscription;
+
   ShowroomListCubit()
-      : super(const ShowroomListState(isLogged: false, isLoading: true)) {
+      : super(const ShowroomListState(
+            isLogged: false, isLoading: true, showroomListModel: [])) {
     fetchShowroomListDataFunction();
+    _userAddedSubscription = eventBus.on<AddShowroomEvent>().listen(
+      (event) async {
+        fetchShowroomListDataFunction();
+      },
+    );
   }
+
   final DioInterceptors dio = DioInterceptors();
 
   Future<void> fetchShowroomListDataFunction() async {
-    emit(state.copyWith(isLogged: true));
     try {
       final response = await dio.get(endPoint: ApiEndPoints.getShowroomList);
 
@@ -25,9 +35,8 @@ class ShowroomListCubit extends Cubit<ShowroomListState> {
         final showroomListData = (response.data as List)
             .map((e) => ShowroomListDataModel.fromJson(e))
             .toList();
-        List<ShowroomListDataModel> showroom =
-            showroomListData.where((e) => e.status != 2).toList();
-        Log.debug(showroom);
+
+        Log.info("Check Showroom List ${showroomListData.length}");
         emit(state.copyWith(
           isLoading: false,
           isLogged: true,
@@ -55,7 +64,7 @@ class ShowroomListCubit extends Cubit<ShowroomListState> {
         emit(state.copyWith(
           isLoading: false,
           isLogged: true,
-          showroomListModel: state.showroomListModel!,
+          showroomListModel: state.showroomListModel,
         ));
       } else {
         Log.info(
@@ -71,4 +80,14 @@ class ShowroomListCubit extends Cubit<ShowroomListState> {
       emit(state.copyWith(isLoading: true, isLogged: false));
     }
   }
+
+  @override
+  Future<void> close() {
+    _userAddedSubscription.cancel();
+    return super.close();
+  }
+}
+
+class AddShowroomEvent {
+  AddShowroomEvent();
 }

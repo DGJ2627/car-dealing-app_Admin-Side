@@ -1,20 +1,17 @@
 import 'dart:async';
-
 import 'package:car_dekho_app/src/interceptors/admin/admin_interceptors.dart';
 import 'package:car_dekho_app/src/packages/domain/model/vehicle_test_ride_model/vehicle_test_ride_model.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
-import 'package:car_dekho_app/src/packages/resources/stream_subscription.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../main.dart';
 import '../../utils/logger.dart';
 
 part 'vehicle_test_ride_state.dart';
 
 class VehicleTestRideCubit extends Cubit<VehicleTestRideState> {
   VehicleTestRideCubit()
-      : super(const VehicleTestRideState(isLoaded: false, isLoading: true)) {
+      : super(const VehicleTestRideState(
+            isLoaded: false, isLoading: true, vehicleTestRideList: [])) {
     fetchVehicleTestRideListFunction();
   }
 
@@ -65,7 +62,7 @@ class VehicleTestRideCubit extends Cubit<VehicleTestRideState> {
 
   void removeTestRide(VehicleTestRideModel testRide) {
     final updatedList = state.vehicleTestRideList
-        ?.where((ride) => ride.id != testRide.id)
+        .where((ride) => ride.id != testRide.id)
         .toList();
     emit(state.copyWith(vehicleTestRideList: updatedList));
   }

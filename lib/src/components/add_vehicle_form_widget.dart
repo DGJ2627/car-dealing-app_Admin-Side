@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../logic/add_vehicle_cubit/add_vehicle_cubit.dart';
+import '../packages/data/local/shared_preferences/shared_preferences_database.dart';
 import '../packages/domain/model/add_vehicle_model/add_vehicle_model.dart';
 import '../packages/helper/custom_text_field.dart';
 import '../packages/resources/colors.dart';
@@ -25,7 +26,7 @@ class AddVehicleFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final showroomController = TextEditingController(text: showroomId);
     final carNameController = TextEditingController();
-    final typeController = TextEditingController();
+    final typeController = TextEditingController(text: "0");
     final originalPriceController = TextEditingController();
     final warrantyController = TextEditingController();
     final engineController = TextEditingController();
@@ -62,7 +63,7 @@ class AddVehicleFormWidget extends StatelessWidget {
         'fieldController': typeController,
         'fieldName': 'Type',
         'autoFocus': false,
-        'isReadOnly': false,
+        'isReadOnly': true,
         'validator': (p0) {
           return null;
         },
@@ -102,7 +103,7 @@ class AddVehicleFormWidget extends StatelessWidget {
         'fieldController': powerController,
         'fieldName': 'power',
         'autoFocus': false,
-        'isReadOnly': true,
+        'isReadOnly': false,
         'validator': (p0) {
           return null;
         },
@@ -226,13 +227,15 @@ class AddVehicleFormWidget extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    String? image = await LocalString.getUploadVehicleImageID();
                     if (globalKey.currentState!.validate()) {
-                      final data =
-                          AppConstants.extractFormData(fields, fieldMapping);
+                      final data = AppConstants.extractFormData(
+                          fields, fieldMapping, image!.split('.').first);
                       final addVehicleData = AddVehicleDataModel.fromJson(data);
                       Log.debug(addVehicleData);
                       cubit.addVehicleInShowroomFunction(data);
+                      LocalString.clearDocAndBrandName();
                     }
                   },
                   style: const ButtonStyle(

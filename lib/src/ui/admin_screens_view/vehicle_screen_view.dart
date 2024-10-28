@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../components/VehicleShowWidget.dart';
+import '../../components/vehicle_show_widget.dart';
 import '../../packages/resources/colors.dart';
 import '../../utils/logger.dart';
 
@@ -32,13 +32,37 @@ class _VehicleScreenViewState extends State<VehicleScreenView> {
       builder: (context, state) {
         eventBus.on<DeleteVehicleEvent>().listen(
           (event) {
-            state.vehicleListModel!.removeWhere(
+            state.vehicleListModel.removeWhere(
               (element) => element.id == event.listId,
             );
             setState(() {});
           },
         );
-        if (state.isLoading) {
+        if (state.vehicleListModel.isEmpty) {
+          return Scaffold(
+            backgroundColor: AppColors.primaryColor,
+            body: SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Add Vehicle in showroom",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontSize: 20, color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (state.isLoading) {
           return Scaffold(
             backgroundColor: AppColors.primaryColor,
             body: SafeArea(
@@ -63,7 +87,8 @@ class _VehicleScreenViewState extends State<VehicleScreenView> {
             ),
           );
         } else if (state.isLogged) {
-          final filteredShowroomList = state.vehicleListModel!
+          // setState(() {});
+          final filteredShowroomList = state.vehicleListModel
               .where((showroom) => showroom.status != 2)
               .toList();
 
@@ -119,7 +144,8 @@ class _VehicleScreenViewState extends State<VehicleScreenView> {
                                           .textTheme
                                           .titleLarge!
                                           .copyWith(
-                                              color: AppColors.primaryColor),
+                                              color: AppColors.blackColor,
+                                              fontSize: 50),
                                     ),
                                   )
                                 : VehicleShowWidget(

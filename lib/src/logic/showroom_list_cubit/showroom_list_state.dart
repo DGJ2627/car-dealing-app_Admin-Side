@@ -3,11 +3,12 @@ part of 'showroom_list_cubit.dart';
 class ShowroomListState extends Equatable {
   final bool isLogged;
   final bool isLoading;
-  final List<ShowroomListDataModel>? showroomListModel;
+  final List<ShowroomListDataModel> showroomListModel;
+
   const ShowroomListState(
       {required this.isLogged,
       required this.isLoading,
-      this.showroomListModel});
+      required this.showroomListModel});
 
   ShowroomListState copyWith({
     bool? isLogged,
@@ -17,12 +18,14 @@ class ShowroomListState extends Equatable {
     return ShowroomListState(
         isLogged: isLogged ?? this.isLogged,
         isLoading: isLoading ?? this.isLoading,
-        showroomListModel: showroomListModel ?? this.showroomListModel);
+        showroomListModel:
+            showroomListModel ?? List.from(this.showroomListModel));
   }
 
   @override
   List<Object> get props => [
         isLogged,
         isLoading,
+        showroomListModel,
       ];
 }

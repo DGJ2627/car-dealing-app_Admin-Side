@@ -23,8 +23,6 @@ class VehicleShowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Log.debug(
         "Loading Image :: ${ApiEndPoints.getVehicleImage}/${vehicleListData.photo}.png");
-    String imageLoading =
-        "${ApiEndPoints.getVehicleImage}/${vehicleListData.photo}.png";
 
     return Container(
       height: 400,

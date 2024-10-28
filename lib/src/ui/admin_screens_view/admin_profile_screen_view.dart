@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
-import '../../packages/domain/model/admin_data_model.dart';
 import 'admin_profile_edit_screen_view.dart';
 
 class AdminProfileScreenView extends StatefulWidget {
@@ -28,13 +27,6 @@ class AdminProfileScreenView extends StatefulWidget {
 }
 
 class _AdminProfileScreenViewState extends State<AdminProfileScreenView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    context.read<AdminProfileCubit>().fetchAdminData();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdminProfileCubit, AdminProfileState>(
@@ -116,10 +108,12 @@ class _AdminProfileScreenViewState extends State<AdminProfileScreenView> {
                                 .read<AdminProfileCubit>()
                                 .deleteAdminFunction();
                             await LocalString.clearAllSharedPreferencesData();
-                            Navigator.pushReplacementNamed(
-                              context,
-                              SignInAdminView.routeName,
-                            );
+                            if (context.mounted) {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                SignInAdminView.routeName,
+                              );
+                            }
                           },
                         );
                       },

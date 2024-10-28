@@ -3,7 +3,6 @@ import 'package:car_dekho_app/src/packages/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 class OrderVehicleListScreenView extends StatelessWidget {
   static String routeName = "/OrderVehicleListScreenView";
@@ -22,7 +21,31 @@ class OrderVehicleListScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderVehicleListCubit, OrderVehicleListState>(
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state.orderVehicleList.isEmpty) {
+          return Scaffold(
+            backgroundColor: AppColors.primaryColor,
+            body: SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "No Order Vehicle",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (state.isLoading) {
           return Scaffold(
             backgroundColor: AppColors.primaryColor,
             body: SafeArea(
@@ -68,9 +91,9 @@ class OrderVehicleListScreenView extends StatelessWidget {
                       Expanded(
                         flex: 9,
                         child: ListView.builder(
-                          itemCount: state.orderVehicleList!.length,
+                          itemCount: state.orderVehicleList.length,
                           itemBuilder: (context, index) {
-                            final orderList = state.orderVehicleList![index];
+                            final orderList = state.orderVehicleList[index];
                             return ExpansionTile(
                               backgroundColor: Colors.grey.withOpacity(0.1),
                               shape: Border.all(color: Colors.transparent),

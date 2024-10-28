@@ -1,22 +1,36 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:car_dekho_app/src/packages/domain/model/brand_list_model/brand_list_data.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
+import 'package:car_dekho_app/src/packages/resources/stream_subscription.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../main.dart';
 import '../../interceptors/admin/admin_interceptors.dart';
 import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
 import '../../packages/domain/model/showroom_add_model/showroom_add_model.dart';
 import '../../utils/logger.dart';
+import '../showroom_list_cubit/showroom_list_cubit.dart';
 
 part 'add_showroom_state.dart';
 
-class AddShowroomCubit extends Cubit<AddShowroomState> {
+class AddShowroomCubit extends Cubit<AddShowroomState>
+    with StreamSubscriptionMixin {
+  late StreamSubscription _brandName;
+
   AddShowroomCubit()
-      : super(const AddShowroomState(isLogged: false, isLoading: true)) {
+      : super(const AddShowroomState(
+            isLogged: false, isLoading: true, brandListDataModel: [])) {
     fetchBrandNameList();
+
+    _brandName = eventBus.on<AddBrandNameEvent>().listen(
+      (event) {
+        fetchBrandNameList();
+      },
+    );
   }
 
   final DioInterceptors dio = DioInterceptors();
@@ -24,9 +38,9 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
   //add showroom data
 
   Future<void> addShowRoomDetailsFunction(
-      {required ShowroomDataAddModel showroomModel,
-      required BuildContext context}) async {
-    emit(state.copyWith(isLogged: true));
+      {required ShowroomDataAddModel showroomModel}) async {
+    //emit(state.copyWith(isLogged: true));
+    Log.info("ShowRoom Map Send Data :$showroomModel");
     try {
       final response = await dio.post(
         endPoint: ApiEndPoints.addShowroom,
@@ -41,20 +55,12 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
       );
 
       if (response.statusCode == 200) {
+        //========================================//
+        eventBus.fire(AddShowroomEvent());
+        //========================================//
         Log.success("ShowRoom Data :- ${response.data}");
       } else if (response.statusCode == 400 || response.statusCode == 422) {
-        final responseData = response.data as Map<String, dynamic>;
-        if (responseData.containsKey('showroomName')) {
-          final errorMessage = responseData['showroomName'] as String;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errorMessage)),
-          );
-        } else if (responseData.containsKey('licenseNumber')) {
-          final errorMessage = responseData['licenseNumber'] as String;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errorMessage)),
-          );
-        }
+        Log.info(" ${response.statusCode} \n ${response.data}");
       } else {
         Log.info(
             "addShowRoomDetailsFunction Other status Code: - ${response.statusCode} \n ${response.data}");
@@ -83,6 +89,29 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
       }
     } catch (e) {
       Log.error("Error From Get fetchBrandNameList API :- $e");
+      emit(state.copyWith(isLoading: true, isLogged: false));
+    }
+  }
+
+  // add brand
+
+  Future<void> addBrandName(String brandName) async {
+    try {
+      final response = await dio.post(
+        endPoint: ApiEndPoints.addBrand,
+        data: {
+          'brandName': brandName,
+        },
+      );
+      if (response.statusCode == 200) {
+        Log.success("Add BrandName ${response.data}");
+        eventBus.fire(AddBrandNameEvent());
+      } else {
+        Log.info(
+            "addBrandName Other status Code: - ${response.statusCode} \n ${response.data}");
+      }
+    } catch (e) {
+      Log.error("Error From Get addBrandName API :- $e");
       emit(state.copyWith(isLoading: true, isLogged: false));
     }
   }
@@ -133,27 +162,16 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
 
   Future<void> deleteBrandListFunction(String? brandID) async {
     try {
-      final deleteShowroomList =
-          state.brandListDataModel!.firstWhere((item) => item.id == brandID);
-
       final response = await dio
-          .delete(endPoint: ApiEndPoints.deleteShowroom, queryParameters: {
+          .delete(endPoint: ApiEndPoints.deleteBrand, queryParameters: {
         'brandId': brandID,
       });
 
       if (response.statusCode == 200) {
-        state.brandListDataModel!.removeWhere((item) => item.id == brandID);
-
-        final index = state.brandListDataModel!.indexOf(deleteShowroomList);
-        if (index != -1) {
-          state.brandListDataModel![index];
-        }
-
-        emit(state.copyWith(
-          isLoading: false,
-          isLogged: true,
-          brandListDataModel: state.brandListDataModel!,
-        ));
+        final updatedBrandList = state.brandListDataModel
+            .where((element) => element.id != brandID)
+            .toList();
+        emit(state.copyWith(brandListDataModel: updatedBrandList));
       } else {
         Log.info(
             "deleteBrandListFunction Other status Code: -\n ${response.statusCode} \n ${response.data}");
@@ -168,84 +186,14 @@ class AddShowroomCubit extends Cubit<AddShowroomState> {
       emit(state.copyWith(isLoading: true, isLogged: false));
     }
   }
-}
-
-/*
-class AddShowroomCubit extends Cubit<AddShowroomState> {
-  AddShowroomCubit()
-      : super(const AddShowroomState(isLogged: false, isLoading: true)) {
-    _brandNameListStreamController = StreamController<List<BrandListDataModel>>();
-    _brandNameListStream = _brandNameListStreamController.stream;
-    fetchBrandNameList();
-  }
-
-  final DioInterceptors dio = DioInterceptors();
-
-  late StreamController<List<BrandListDataModel>> _brandNameListStreamController;
-  late Stream<List<BrandListDataModel>> _brandNameListStream;
-
-  Stream<List<BrandListDataModel>> get brandNameListStream => _brandNameListStream;
-
-  // ... (other methods) ...
-
-  Future<void> fetchBrandNameList() async {
-    try {final response = await dio.get(
-        endPoint: ApiEndPoints.showBrandList,
-      );
-      if (response.statusCode == 200) {
-        final brandNameListData = (response.data as List)
-            .map((e) => BrandListDataModel.fromJson(e))
-            .toList();
-        _brandNameListStreamController.add(brandNameListData);
-        Log.success("brandNameListData :- $brandNameListData");
-      }
-    } catch (e) {
-      Log.error("Error From Get fetchBrandNameList API :- $e");
-      emit(state.copyWith(isLoading: true, isLogged: false));
-    }
-  }
-
-  // ... (other methods) ...
 
   @override
   Future<void> close() {
-    _brandNameListStreamController.close();
+    _brandName.cancel();
     return super.close();
   }
 }
 
-
-@override
-Widget build(BuildContext context) {
-  return BlocBuilder<AddShowroomCubit, AddShowroomState>(
-    builder: (context, state) {
-      // ... (other code) ...
-
-      return Scaffold(
-        // ... (other code) ...
-
-        Expanded(
-          child: StreamBuilder<List<BrandListDataModel>>(
-            stream: context.read<AddShowroomCubit>().brandNameListStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return AddShowroomFormWidget(
-                  // ... (other parameters) ...
-                  brandListModel: snapshot.data!, // Use snapshot.data
-                  // ... (other parameters) ...
-                );
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
-        ),
-
-        // ... (other code) ...
-      );
-    },
-  );
+class AddBrandNameEvent {
+  AddBrandNameEvent();
 }
- */

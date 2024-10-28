@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hugeicons/hugeicons.dart';
 
-import '../../../main.dart';
 import '../../components/app_custom_dialog_box.dart';
 import '../../packages/domain/model/vehicle_test_ride_model/vehicle_test_ride_model.dart';
 import '../../packages/resources/colors.dart';
@@ -27,7 +26,31 @@ class VehicleTestRideScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<VehicleTestRideCubit, VehicleTestRideState>(
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state.vehicleTestRideList.isEmpty) {
+          return Scaffold(
+            backgroundColor: AppColors.primaryColor,
+            body: SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Not Booking any Test Ride...",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (state.isLoading) {
           return Scaffold(
             backgroundColor: AppColors.primaryColor,
             body: SafeArea(
@@ -73,11 +96,11 @@ class VehicleTestRideScreenView extends StatelessWidget {
                       Expanded(
                         flex: 9,
                         child: ListView.builder(
-                          itemCount: state.vehicleTestRideList?.length ?? 0,
+                          itemCount: state.vehicleTestRideList.length,
                           // Handle null list
                           itemBuilder: (context, index) {
                             return TestRideListItem(
-                                testRide: state.vehicleTestRideList![index]);
+                                testRide: state.vehicleTestRideList[index]);
                           },
                         ),
                       ),
@@ -114,7 +137,6 @@ class TestRideListItem extends StatelessWidget {
         direction: DismissDirection.endToStart,
         key: ValueKey(testRide),
         onDismissed: (direction) {
-          //context.read<VehicleTestRideCubit>().removeTestRide(testRide);
           context.read<VehicleTestRideCubit>().removeTestRide(testRide);
         },
         child: Card(
@@ -187,7 +209,9 @@ class TestRideListItem extends StatelessWidget {
                 .read<VehicleTestRideCubit>()
                 .approvedTestRide(testRide.id);
             Log.success(rideMes);
-            Navigator.pop(context);
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
           },
         );
       },

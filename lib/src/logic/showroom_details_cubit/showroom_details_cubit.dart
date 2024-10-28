@@ -3,7 +3,6 @@ import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../main.dart';
 import '../../packages/domain/model/showroom_list_model/showroom_list_model.dart';
 import '../../utils/logger.dart';
 

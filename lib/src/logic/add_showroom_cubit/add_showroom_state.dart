@@ -3,10 +3,10 @@ part of 'add_showroom_cubit.dart';
 class AddShowroomState extends Equatable {
   final bool isLogged;
   final bool isLoading;
-  final List<BrandListDataModel>? brandListDataModel;
+  final List<BrandListDataModel> brandListDataModel;
 
   const AddShowroomState(
-      {this.brandListDataModel,
+      {required this.brandListDataModel,
       required this.isLogged,
       required this.isLoading});
 
@@ -18,12 +18,10 @@ class AddShowroomState extends Equatable {
     return AddShowroomState(
         isLogged: isLogged ?? this.isLogged,
         isLoading: isLoading ?? this.isLoading,
-        brandListDataModel: brandListDataModel ?? this.brandListDataModel);
+        brandListDataModel:
+            brandListDataModel ?? List.from(this.brandListDataModel));
   }
 
   @override
-  List<Object> get props => [
-        isLogged,
-        isLoading,
-      ];
+  List<Object> get props => [isLogged, isLoading, brandListDataModel];
 }

@@ -37,8 +37,10 @@ class SignInCubit extends Cubit<SignInState> {
         emit(state.copyWith(isLoading: false, isLoggedIn: true));
 
         //navigate in home screen
-        Navigator.pushNamedAndRemoveUntil(
-            context, BottomNavigationView.routeName, (route) => true);
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, BottomNavigationView.routeName, (route) => true);
+        }
       } else if (response.statusCode == 422) {
         Log.error(response.statusCode);
 

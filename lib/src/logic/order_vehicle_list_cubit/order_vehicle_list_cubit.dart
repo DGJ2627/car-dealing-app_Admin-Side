@@ -10,7 +10,8 @@ part 'order_vehicle_list_state.dart';
 
 class OrderVehicleListCubit extends Cubit<OrderVehicleListState> {
   OrderVehicleListCubit()
-      : super(const OrderVehicleListState(isLoading: true, isLogged: false));
+      : super(const OrderVehicleListState(
+            isLoading: true, isLogged: false, orderVehicleList: []));
 
   DioInterceptors dio = DioInterceptors();
 

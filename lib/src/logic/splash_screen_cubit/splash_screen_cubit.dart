@@ -1,10 +1,9 @@
 import 'dart:async';
-
-import 'package:bloc/bloc.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/bottom_navigation_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
 import '../../ui/authentication/admin/sign_in_admin_view/sign_in_admin_view.dart';
@@ -19,13 +18,15 @@ class SplashScreenCubit extends Cubit<SplashScreenState> {
     Future.delayed(
       Duration(seconds: state.splashTimeOver),
       () {
-        Navigator.pushReplacementNamed(
-          context,
-          token == null
-              ? SignInAdminView.routeName
-              //? BottomNavigationView.routeName
-              : BottomNavigationView.routeName,
-        );
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(
+            context,
+            token == null
+                ? SignInAdminView.routeName
+                //? BottomNavigationView.routeName
+                : BottomNavigationView.routeName,
+          );
+        }
       },
     );
   }

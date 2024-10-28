@@ -1,20 +1,28 @@
 import 'dart:async';
 
 import 'package:car_dekho_app/src/packages/domain/model/vehicle_data_model/vehicle_data_model.dart';
+import 'package:car_dekho_app/src/packages/resources/stream_subscription.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../main.dart';
 import '../../interceptors/admin/admin_interceptors.dart';
 import '../../packages/resources/app_constants.dart';
-import '../../packages/resources/stream_subscription.dart';
 import '../../utils/logger.dart';
 
 part 'vehicle_state.dart';
 
-class VehicleCubit extends Cubit<VehicleState> {
-  VehicleCubit() : super(const VehicleState(isLogged: false, isLoading: true)) {
+class VehicleCubit extends Cubit<VehicleState> with StreamSubscriptionMixin {
+  late StreamSubscription _userAddedSubscription;
+  VehicleCubit()
+      : super(const VehicleState(
+            isLogged: false, isLoading: true, vehicleListModel: [])) {
     fetchVehicleListData();
+    _userAddedSubscription = eventBus.on<AddVehicleEvent>().listen(
+      (event) async {
+        fetchVehicleListData();
+      },
+    );
   }
   final DioInterceptors dio = DioInterceptors();
 
@@ -45,4 +53,14 @@ class VehicleCubit extends Cubit<VehicleState> {
       emit(state.copyWith(isLoading: true, isLogged: false));
     }
   }
+
+  @override
+  Future<void> close() {
+    _userAddedSubscription.cancel();
+    return super.close();
+  }
+}
+
+class AddVehicleEvent {
+  AddVehicleEvent();
 }

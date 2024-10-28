@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'my_library.dart';
 
 abstract interface class AppConstants {
   static final emailPatternRegExp = RegExp(
@@ -13,8 +13,7 @@ abstract interface class AppConstants {
   static final licenseNoPatternRegExp = RegExp(r'^[a-zA-Z]{5}[0-9]{5}$');
 
   // base url
-  static const String baseUrl =
-      "https://b798-2405-201-200c-6876-605c-d2dc-a439-48b.ngrok-free.app";
+  static const String baseUrl = "https://d33c-49-36-83-171.ngrok-free.app";
 
   static String formatPriceInLakhsAndCrores(int price) {
     if (price >= 10000000) {
@@ -37,19 +36,22 @@ abstract interface class AppConstants {
     return discountPercentage.toString();
   }
 
-  static Map<String, dynamic> extractFormData(
-      List<Map<String, dynamic>> fields, Map<String, String> fieldMapping) {
+  static Map<String, dynamic> extractFormData(List<Map<String, dynamic>> fields,
+      Map<String, String> fieldMapping, String? imageId) {
     final data = <String, dynamic>{};
 
     for (final field in fields) {
       final fieldName = field['fieldName'] as String;
       final fieldController = field['fieldController'] as TextEditingController;
       final modelProperty = fieldMapping[fieldName];
-
+      //String? documentID = await LocalString.getUploadVehicleImageID();
       if (modelProperty != null) {
         if (modelProperty == 'orignalPrice' || modelProperty == 'quantity') {
           data[modelProperty] =
               int.tryParse(fieldController.text) ?? 0; // Handle parsing errors
+        } else if (modelProperty == 'photo') {
+          Log.info("Vehicle Image :: $fieldController");
+          data[modelProperty] = imageId;
         } else {
           data[modelProperty] = fieldController.text;
         }
@@ -83,6 +85,7 @@ abstract interface class ApiEndPoints {
   static const uploadShowroomDoc = '/uploadShowroomDocuments';
   static const updateShowroomDoc = '/updateShowroomDetails';
   static const deleteShowroom = '/deleteShowroom';
+  static const deleteBrand = '/deleteBrand';
 
   //=================================================//
 

@@ -10,7 +10,8 @@ part 'user_service_list_state.dart';
 
 class UserServiceListCubit extends Cubit<UserServiceListState> {
   UserServiceListCubit()
-      : super(const UserServiceListState(isLoaded: false, isLoading: true)) {
+      : super(const UserServiceListState(
+            isLoaded: false, isLoading: true, userFreeServiceList: [])) {
     fetchUserFreeServiceListFunction();
   }
 

@@ -1,10 +1,9 @@
 import 'dart:io';
-
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:car_dekho_app/src/utils/logger.dart';
 import 'package:dio/dio.dart';
-
 import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
+import '../../packages/helper/status_code_handler.dart';
 
 class DioInterceptors extends Interceptor {
   Dio dio = Dio();
@@ -35,11 +34,13 @@ class DioInterceptors extends Interceptor {
         onResponse: (response, handler) {
           Log.debug(
               'Response[${response.statusCode}] => DATA: ${response.data}');
+          ApiStatusCode.successFulStatus(response);
           return handler.next(response);
         },
         onError: (error, handler) {
           Log.error(
               'Error[${error.response?.statusCode}] => MESSAGE: ${error.message}');
+          ApiStatusCode.errorHandler(error);
           return handler.next(error);
         },
       ),

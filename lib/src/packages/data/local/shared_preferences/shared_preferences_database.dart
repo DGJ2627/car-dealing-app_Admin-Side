@@ -49,6 +49,7 @@ abstract interface class LocalString {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('documentID');
     await prefs.remove('uploadBrandID');
+    await prefs.remove('vehicleImageID');
   }
 
   static Future<void> clearAllSharedPreferencesData() async {

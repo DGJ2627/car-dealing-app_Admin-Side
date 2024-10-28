@@ -1,15 +1,11 @@
-import 'package:car_dekho_app/src/components/app_custom_dialog_box.dart';
 import 'package:car_dekho_app/src/logic/add_showroom_cubit/add_showroom_cubit.dart';
-import 'package:car_dekho_app/src/packages/domain/model/showroom_add_model/showroom_add_model.dart';
 import 'package:car_dekho_app/src/packages/resources/colors.dart';
-import 'package:car_dekho_app/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../components/add_showroom_form_widget.dart';
-import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
 
 class AddShowroomScreenView extends StatelessWidget {
   static String routeName = "/AddShowroomScreenView";
@@ -28,13 +24,7 @@ class AddShowroomScreenView extends StatelessWidget {
     return BlocBuilder<AddShowroomCubit, AddShowroomState>(
       builder: (context, state) {
         final globalKey = GlobalKey<FormState>();
-        final showroomNameController = TextEditingController();
-        final ownerNameController = TextEditingController();
-        final licenseNumberController = TextEditingController();
-        final locationNameController = TextEditingController();
-        final verificationDocumentsController = TextEditingController();
-        final brandNameController = TextEditingController();
-
+        final cubit = context.read<AddShowroomCubit>();
         return Scaffold(
           body: SingleChildScrollView(
             child: SafeArea(
@@ -84,67 +74,7 @@ class AddShowroomScreenView extends StatelessWidget {
                     const Gap(30),
                     AddShowroomFormWidget(
                       globalKey: globalKey,
-                      showroomNameController: showroomNameController,
-                      ownerNameController: ownerNameController,
-                      licenseNumberController: licenseNumberController,
-                      locationNameController: locationNameController,
-                      verificationDocumentsController:
-                          verificationDocumentsController,
-                      brandNameController: brandNameController,
-                      uploadShowroomDocument: () {
-                        context.read<AddShowroomCubit>().uploadDocument(
-                            verificationDocumentsController:
-                                verificationDocumentsController);
-                      },
-                      showBrandNameDialog: () async {
-                        context.read<AddShowroomCubit>().fetchBrandNameList();
-                        String? brandID = await LocalString.getUploadBrandID();
-                        AppCustomDialogBox.showBrandNameList(
-                          titleName: "Select Brand Name",
-                          context: context,
-                          brandListModel: state.brandListDataModel,
-                          brandNameController: brandNameController,
-                          deleteBrandFunction: () {
-                            context
-                                .read<AddShowroomCubit>()
-                                .deleteBrandListFunction(brandID);
-                          },
-                        );
-                      },
-                      sendShowRoomDetails: () async {
-                        if (globalKey.currentState!.validate()) {
-                          String? documentID =
-                              await LocalString.getUploadDocumentID();
-                          String? brandID =
-                              await LocalString.getUploadBrandID();
-
-                          ShowroomDataAddModel showroomModel =
-                              ShowroomDataAddModel(
-                            showroomName: showroomNameController.text,
-                            ownerName: ownerNameController.text,
-                            licenseNumber: licenseNumberController.text,
-                            location: locationNameController.text,
-                            verificationDocuments: documentID!.split('.').first,
-                            brand: brandID!,
-                          );
-
-                          Log.info(showroomModel);
-                          context
-                              .read<AddShowroomCubit>()
-                              .addShowRoomDetailsFunction(
-                                showroomModel: showroomModel,
-                                context: context,
-                              );
-
-                          showroomNameController.clear();
-                          ownerNameController.clear();
-                          licenseNumberController.clear();
-                          locationNameController.clear();
-                          verificationDocumentsController.clear();
-                          brandNameController.clear();
-                          LocalString.clearDocAndBrandName();
-                        }
-                      },
+                      cubit: cubit,
                     ),
                   ],
                 ),

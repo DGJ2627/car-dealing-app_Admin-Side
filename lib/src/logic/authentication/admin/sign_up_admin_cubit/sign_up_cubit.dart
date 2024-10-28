@@ -31,7 +31,9 @@ class SignUpCubit extends Cubit<SignUpState> {
       );
       if (response.statusCode == 200) {
         emit(state.copyWith(isLoading: false, isLoggedIn: true));
-        Navigator.pushNamed(context, SignInAdminView.routeName);
+        if (context.mounted) {
+          Navigator.pushNamed(context, SignInAdminView.routeName);
+        }
       } else if (response.statusCode == 422) {
         Log.error(response.statusCode);
         Log.debug(response);

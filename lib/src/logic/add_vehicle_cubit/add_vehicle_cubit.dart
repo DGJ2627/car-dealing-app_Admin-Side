@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:car_dekho_app/src/interceptors/admin/admin_interceptors.dart';
+import 'package:car_dekho_app/src/logic/vehicle_cubit/vehicle_cubit.dart';
 import 'package:car_dekho_app/src/utils/logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../main.dart';
 import '../../packages/data/local/shared_preferences/shared_preferences_database.dart';
-import '../../packages/domain/model/vehicle_data_model/vehicle_data_model.dart';
 import '../../packages/resources/app_constants.dart';
 
 part 'add_vehicle_state.dart';
@@ -27,6 +28,9 @@ class AddVehicleCubit extends Cubit<AddVehicleState> {
 
       if (response.statusCode == 200) {
         Log.success("VehicleInShowroom Data :- ${response.data}");
+        //========================================//
+        eventBus.fire(AddVehicleEvent());
+        //========================================//
       } else {
         Log.info(
             "addVehicleInShowroomFunction Other status Code: -\n ${response.statusCode} \n ${response.data}");

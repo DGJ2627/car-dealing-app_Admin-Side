@@ -24,7 +24,31 @@ class UserServiceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserServiceListCubit, UserServiceListState>(
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state.userFreeServiceList.isEmpty) {
+          return Scaffold(
+            backgroundColor: AppColors.primaryColor,
+            body: SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Not Service ...",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (state.isLoading) {
           return Scaffold(
             backgroundColor: AppColors.primaryColor,
             body: SafeArea(
@@ -70,10 +94,10 @@ class UserServiceList extends StatelessWidget {
                       Expanded(
                         flex: 9,
                         child: ListView.builder(
-                          itemCount: state.userFreeServiceList!.length,
+                          itemCount: state.userFreeServiceList.length,
                           itemBuilder: (context, index) {
                             final serviceList =
-                                state.userFreeServiceList![index];
+                                state.userFreeServiceList[index];
                             final serviceStatus =
                                 serviceList.status == 0 ? false : true;
                             Log.success(serviceList);
@@ -87,7 +111,7 @@ class UserServiceList extends StatelessWidget {
                                 direction: DismissDirection.endToStart,
                                 key: ValueKey(serviceList),
                                 onDismissed: (direction) {
-                                  state.userFreeServiceList!.removeAt(index);
+                                  state.userFreeServiceList.removeAt(index);
                                 },
                                 child: Card(
                                   elevation: 2,
