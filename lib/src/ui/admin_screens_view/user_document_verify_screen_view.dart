@@ -1,3 +1,4 @@
+import 'package:car_dekho_app/src/components/build_common_states.dart';
 import 'package:car_dekho_app/src/logic/user_document_verify_cubit/user_document_verify_cubit.dart';
 import 'package:car_dekho_app/src/utils/logger.dart';
 import 'package:flutter/material.dart';
@@ -25,29 +26,8 @@ class UserDocumentVerifyScreenView extends StatelessWidget {
     return BlocBuilder<UserDocumentVerifyCubit, UserDocumentVerifyState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return Scaffold(
-            backgroundColor: AppColors.primaryColor,
-            body: SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Data will Loading...",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+          return BuildCommonState.buildLoadingState(
+              context, "Data will Loading...");
         } else if (state.isLogged) {
           return Scaffold(
             backgroundColor: AppColors.primaryColor,

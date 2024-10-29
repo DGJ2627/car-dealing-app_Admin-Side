@@ -1,4 +1,5 @@
 import 'package:car_dekho_app/main.dart';
+import 'package:car_dekho_app/src/components/build_common_states.dart';
 import 'package:car_dekho_app/src/logic/showroom_list_cubit/showroom_list_cubit.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/showroom_details_screen_view.dart';
@@ -31,24 +32,24 @@ class ShowroomScreenView extends StatefulWidget {
 }
 
 class _ShowroomScreenViewState extends State<ShowroomScreenView> {
-  aiModel() async {
-    final model = GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
-      apiKey: AppConstants.generativeAiKey,
-    );
-
-    const prompt = 'Write a story about a magic backpack.';
-    final content = [Content.text(prompt)];
-    final response = await model.generateContent(content);
-
-    Log.success(response.text);
-  }
-
-  @override
-  void initState() {
-    aiModel();
-    super.initState();
-  }
+  // aiModel() async {
+  //   final model = GenerativeModel(
+  //     model: 'gemini-1.5-flash-latest',
+  //     apiKey: AppConstants.generativeAiKey,
+  //   );
+  //
+  //   const prompt = 'Write a story about a magic backpack.';
+  //   final content = [Content.text(prompt)];
+  //   final response = await model.generateContent(content);
+  //
+  //   Log.success(response.text);
+  // }
+  //
+  // @override
+  // void initState() {
+  //   aiModel();
+  //   super.initState();
+  // }
 
   Future<void> _handleRefresh() async {
     return await Future.delayed(
@@ -72,18 +73,8 @@ class _ShowroomScreenViewState extends State<ShowroomScreenView> {
           },
         );
         if (state.isLoading) {
-          return Scaffold(
-            backgroundColor: AppColors.primaryColor,
-            body: Center(
-              child: Text(
-                "Showroom Data is Loading...",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: AppColors.blackColor),
-              ),
-            ),
-          );
+          return BuildCommonState.buildLoadingState(
+              context, "Showroom Data is Loading...");
         } else if (state.isLogged) {
           final filteredShowroomList = state.showroomListModel
               .where((showroom) => showroom.status != 2)
@@ -197,9 +188,8 @@ class _ShowroomScreenViewState extends State<ShowroomScreenView> {
                                                         .textTheme
                                                         .titleMedium!
                                                         .copyWith(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                        ),
+                                                            color: AppColors
+                                                                .blackColor),
                                                   ),
                                                   const Gap(10),
                                                 ],

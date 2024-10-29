@@ -1,4 +1,5 @@
 import 'package:car_dekho_app/main.dart';
+import 'package:car_dekho_app/src/components/build_common_states.dart';
 import 'package:car_dekho_app/src/logic/vehicle_cubit/vehicle_cubit.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/add_vehicle_screen_view.dart';
 import 'package:flutter/material.dart';
@@ -39,55 +40,12 @@ class _VehicleScreenViewState extends State<VehicleScreenView> {
           },
         );
         if (state.vehicleListModel.isEmpty) {
-          return Scaffold(
-            backgroundColor: AppColors.primaryColor,
-            body: SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Add Vehicle in showroom",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontSize: 20, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+          return BuildCommonState.buildLoadingState(
+              context, "Add Vehicle in showroom");
         } else if (state.isLoading) {
-          return Scaffold(
-            backgroundColor: AppColors.primaryColor,
-            body: SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Vehicle Data is Loading",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(color: AppColors.blackColor),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+          return BuildCommonState.buildLoadingState(
+              context, "Add Vehicle in showroom");
         } else if (state.isLogged) {
-          // setState(() {});
           final filteredShowroomList = state.vehicleListModel
               .where((showroom) => showroom.status != 2)
               .toList();

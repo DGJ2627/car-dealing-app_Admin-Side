@@ -76,7 +76,6 @@ class ShowroomListCubit extends Cubit<ShowroomListState>
       ));
     } catch (e) {
       Log.error("deleteShowroomFunction :- $e");
-      Log.error("deleteShowroomFunction :- ${e.toString()}");
       emit(state.copyWith(isLoading: true, isLogged: false));
     }
   }

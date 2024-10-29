@@ -1,3 +1,4 @@
+import 'package:car_dekho_app/src/components/build_common_states.dart';
 import 'package:car_dekho_app/src/logic/order_vehicle_list_cubit/order_vehicle_list_cubit.dart';
 import 'package:car_dekho_app/src/packages/resources/colors.dart';
 import 'package:flutter/material.dart';
@@ -21,54 +22,12 @@ class OrderVehicleListScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderVehicleListCubit, OrderVehicleListState>(
       builder: (context, state) {
-        if (state.orderVehicleList.isEmpty) {
-          return Scaffold(
-            backgroundColor: AppColors.primaryColor,
-            body: SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "No Order Vehicle",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else if (state.isLoading) {
-          return Scaffold(
-            backgroundColor: AppColors.primaryColor,
-            body: SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Data will Loading...",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+        if (state.isLoading) {
+          return BuildCommonState.buildLoadingState(
+              context, "Data will Loading...");
+        } else if (state.orderVehicleList.isEmpty) {
+          return BuildCommonState.buildLoadingState(
+              context, "No Order Vehicle");
         } else if (state.isLogged) {
           return Scaffold(
             backgroundColor: AppColors.primaryColor,

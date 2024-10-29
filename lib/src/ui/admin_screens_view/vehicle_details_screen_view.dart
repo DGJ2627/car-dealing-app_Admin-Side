@@ -1,4 +1,5 @@
 import 'package:car_dekho_app/main.dart';
+import 'package:car_dekho_app/src/components/build_common_states.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/vehicle_details_edit_screen_view.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/vehicle_screen_view.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,8 @@ class VehicleDetailsScreenView extends StatelessWidget {
     return BlocBuilder<VehicleDetailsCubit, VehicleDetailsState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return const Scaffold(
-            body: Center(
-              child: Text("Wait Data will Loading"),
-            ),
-          );
+          return BuildCommonState.buildLoadingState(
+              context, "Wait Data will Loading");
         } else if (state.isLogged) {
           final List<Map<String, dynamic>> vehicleFeatures = [
             {
