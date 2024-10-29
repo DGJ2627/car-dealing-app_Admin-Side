@@ -13,7 +13,9 @@ abstract interface class AppConstants {
   static final licenseNoPatternRegExp = RegExp(r'^[a-zA-Z]{5}[0-9]{5}$');
 
   // base url
-  static const String baseUrl = "https://d33c-49-36-83-171.ngrok-free.app";
+  static const String baseUrl = "https://0cb3-49-36-83-171.ngrok-free.app";
+  static const String generativeAiKey =
+      "AIzaSyAGipDiH6pDlGxjdRKGlx7nhTDxnBnxSZc";
 
   static String formatPriceInLakhsAndCrores(int price) {
     if (price >= 10000000) {

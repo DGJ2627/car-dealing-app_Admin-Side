@@ -28,11 +28,10 @@ class DioInterceptors extends Interceptor {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           Log.debug('Request[${options.method}] => PATH: ${options.path}');
-          Log.debug('Request[${options.method}] => PATH: ${options.path}');
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          Log.debug(
+          Log.success(
               'Response[${response.statusCode}] => DATA: ${response.data}');
           ApiStatusCode.successFulStatus(response);
           return handler.next(response);

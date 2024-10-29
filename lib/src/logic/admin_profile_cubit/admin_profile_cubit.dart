@@ -51,10 +51,6 @@ class AdminProfileCubit extends Cubit<AdminProfileState>
     }
   }
 
-  void updateAdminData(AdminDataModel newAdminData) {
-    emit(state.copyWith(adminDataModel: newAdminData));
-  }
-
   Future<void> deleteAdminFunction() async {
     try {
       final response = await dio.delete(

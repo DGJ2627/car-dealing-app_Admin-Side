@@ -112,8 +112,9 @@ class VehicleDetailsEditScreenView extends StatelessWidget {
                             if (globalKey.currentState!.validate()) {
                               context
                                   .read<VehicleDetailsEditCubit>()
-                                  .updateVehicleDetails(
-                                      state.vehicleDetailsModel!);
+                                  .updateVehicleDetails(vehicleDetailsMap);
+
+                              // Navigator.pop(context, true);
                             }
                           },
                           style: const ButtonStyle(

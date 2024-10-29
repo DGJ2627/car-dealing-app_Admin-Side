@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../interceptors/admin/admin_interceptors.dart';
 import '../../../../packages/data/local/shared_preferences/shared_preferences_database.dart';
 import '../../../../packages/resources/app_constants.dart';

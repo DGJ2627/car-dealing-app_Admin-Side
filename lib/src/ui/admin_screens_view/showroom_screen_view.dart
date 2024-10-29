@@ -1,9 +1,11 @@
 import 'package:car_dekho_app/main.dart';
 import 'package:car_dekho_app/src/logic/showroom_list_cubit/showroom_list_cubit.dart';
+import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:car_dekho_app/src/ui/admin_screens_view/showroom_details_screen_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import '../../components/app_custom_dialog_box.dart';
@@ -29,6 +31,25 @@ class ShowroomScreenView extends StatefulWidget {
 }
 
 class _ShowroomScreenViewState extends State<ShowroomScreenView> {
+  aiModel() async {
+    final model = GenerativeModel(
+      model: 'gemini-1.5-flash-latest',
+      apiKey: AppConstants.generativeAiKey,
+    );
+
+    const prompt = 'Write a story about a magic backpack.';
+    final content = [Content.text(prompt)];
+    final response = await model.generateContent(content);
+
+    Log.success(response.text);
+  }
+
+  @override
+  void initState() {
+    aiModel();
+    super.initState();
+  }
+
   Future<void> _handleRefresh() async {
     return await Future.delayed(
       const Duration(seconds: 1),

@@ -3,7 +3,7 @@ import 'package:car_dekho_app/src/packages/resources/my_library.dart';
 
 abstract interface class ApiStatusCode {
   static void successFulStatus(Response<dynamic> response) {
-    Log.success("API Error :- $response");
+    Log.success("API :- $response");
     switch (response.statusCode) {
       case 200:
         ToastMessage.showSuccessToast("Successful", "Loaded");

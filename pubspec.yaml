@@ -57,6 +57,7 @@ dependencies:
   shimmer:
   event_bus:
   liquid_pull_to_refresh:
+  google_generative_ai:
 
 
 

@@ -10,6 +10,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import '../../components/other_services_widget.dart';
 import '../../packages/helper/custom_search_delegate.dart';
 import 'order_vehicle_list_screen_view.dart';
 
@@ -183,147 +184,42 @@ class HomeScreenView extends StatelessWidget {
                               childAspectRatio: 1),
                       children: [
                         // order list
-                        GestureDetector(
+                        OtherServicesWidget(
+                          titleName: 'Order Vehicle List',
+                          icon: HugeIcons.strokeRoundedBorderFull,
                           onTap: () {
                             Navigator.pushNamed(
                                 context, OrderVehicleListScreenView.routeName);
                           },
-                          child: Container(
-                            alignment: AlignmentDirectional.center,
-                            height: 200,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              border: Border.all(
-                                  color: AppColors.secondaryColor, width: 2),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Order Vehicle List",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(
-                                          color: AppColors.blackColor,
-                                          fontSize: 14),
-                                ),
-                                const Gap(20),
-                                const Icon(
-                                  HugeIcons.strokeRoundedBorderFull,
-                                  size: 60,
-                                )
-                              ],
-                            ),
-                          ),
                         ),
 
                         //vehicle service
-                        GestureDetector(
-                          onTap: () => Navigator.pushNamed(
-                              context, UserServiceList.routeName),
-                          child: Container(
-                            height: 200,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                border: Border.all(
-                                    color: AppColors.secondaryColor, width: 2),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Vehicle Service",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(
-                                          color: AppColors.blackColor,
-                                          fontSize: 14),
-                                ),
-                                const Gap(20),
-                                const Icon(
-                                  HugeIcons.strokeRoundedCustomerService,
-                                  size: 60,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                        OtherServicesWidget(
+                            titleName: 'Vehicle Service',
+                            icon: HugeIcons.strokeRoundedCustomerService01,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, UserServiceList.routeName);
+                            }),
 
                         //Document verify
-                        GestureDetector(
+                        OtherServicesWidget(
+                          titleName: 'User Document verify',
+                          icon: HugeIcons.strokeRoundedFileSecurity,
                           onTap: () {
                             Navigator.pushNamed(context,
                                 UserDocumentVerifyScreenView.routeName);
                           },
-                          child: Container(
-                            height: 200,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                border: Border.all(
-                                    color: AppColors.secondaryColor, width: 2),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "User Document verify",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(
-                                          color: AppColors.blackColor,
-                                          fontSize: 14),
-                                ),
-                                const Gap(20),
-                                const Icon(
-                                  HugeIcons.strokeRoundedDocumentAttachment,
-                                  size: 60,
-                                )
-                              ],
-                            ),
-                          ),
                         ),
 
                         //Test Ride
-                        GestureDetector(
+                        OtherServicesWidget(
+                          titleName: 'User Test Ride',
+                          icon: HugeIcons.strokeRoundedMotorbike02,
                           onTap: () {
                             Navigator.pushNamed(
                                 context, VehicleTestRideScreenView.routeName);
                           },
-                          child: Container(
-                            height: 200,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                border: Border.all(
-                                    color: AppColors.secondaryColor, width: 2),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "User Test Ride",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(
-                                          color: AppColors.blackColor,
-                                          fontSize: 14),
-                                ),
-                                const Gap(20),
-                                const Icon(
-                                  HugeIcons.strokeRoundedMotorbike02,
-                                  size: 60,
-                                )
-                              ],
-                            ),
-                          ),
                         ),
                       ],
                     ),

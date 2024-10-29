@@ -20,7 +20,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     emit(state.copyWith(location: location, isLoading: false));
   }
 
-  void showLocationContainer(bool isLocationShow) {
-    isLocationShow != isLocationShow;
-  }
+  // void showLocationContainer(bool isLocationShow) {
+  //   isLocationShow != isLocationShow;
+  // }
 }

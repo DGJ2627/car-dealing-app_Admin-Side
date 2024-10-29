@@ -1,19 +1,30 @@
 import 'dart:async';
-
+import 'package:car_dekho_app/main.dart';
 import 'package:car_dekho_app/src/interceptors/admin/admin_interceptors.dart';
 import 'package:car_dekho_app/src/packages/domain/model/vehicle_details_model/vehicle_details_model.dart';
 import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
+import 'package:car_dekho_app/src/packages/resources/stream_subscription.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../utils/logger.dart';
-
 part 'vehicle_details_state.dart';
 
-class VehicleDetailsCubit extends Cubit<VehicleDetailsState> {
+class VehicleDetailsCubit extends Cubit<VehicleDetailsState>
+    with StreamSubscriptionMixin {
+  late StreamSubscription _vehicleUpdateDetailsSubscription;
   VehicleDetailsCubit({required this.vehicleId})
       : super(const VehicleDetailsState(isLoading: true, isLogged: false)) {
     fetchVehicleDetailsFunction(vehicleId);
+    _vehicleUpdateDetailsSubscription =
+        eventBus.on<VehicleDetailsUpdateEvent>().listen(
+      (event) {
+        Log.info("Vehicle Fire Event ${event.vehicleDataModel}");
+
+        emit(state.copyWith(vehicleDetailsModel: event.vehicleDataModel));
+
+        Log.info("Vehicle Fire emit Event ${state.vehicleDetailsModel}");
+      },
+    );
   }
 
   DioInterceptors dio = DioInterceptors();
@@ -74,4 +85,16 @@ class VehicleDetailsCubit extends Cubit<VehicleDetailsState> {
       emit(state.copyWith(isLoading: true, isLogged: false));
     }
   }
+
+  @override
+  Future<void> close() {
+    _vehicleUpdateDetailsSubscription.cancel();
+    return super.close();
+  }
+}
+
+class VehicleDetailsUpdateEvent {
+  final VehicleDetailsModel vehicleDataModel;
+
+  VehicleDetailsUpdateEvent(this.vehicleDataModel);
 }

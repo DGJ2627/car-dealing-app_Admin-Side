@@ -3,8 +3,10 @@ import 'package:car_dekho_app/src/packages/resources/app_constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../main.dart';
 import '../../packages/domain/model/vehicle_details_model/vehicle_details_model.dart';
 import '../../utils/logger.dart';
+import '../vehicle_details_cubit/vehicle_details_cubit.dart';
 
 part 'vehicle_details_edit_state.dart';
 
@@ -41,6 +43,7 @@ class VehicleDetailsEditCubit extends Cubit<VehicleDetailsEditState> {
           isLoading: false,
           isLogged: true,
         ));
+        eventBus.fire(VehicleDetailsUpdateEvent(vehicleDetailsMap));
       }
     } catch (e) {
       Log.error("updateVehicleDetails Patch API $e");

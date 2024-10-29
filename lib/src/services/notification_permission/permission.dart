@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:car_dekho_app/src/packages/helper/toast_messge.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -10,13 +11,16 @@ abstract interface class AppPermissions {
       if (permission == LocationPermission.denied) {
         locationMessage = "Location permissions are denied";
 
+        ToastMessage.showErrorToast(
+            "Location Permission Denied", locationMessage);
         return locationMessage;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       locationMessage = "Location permissions are permanently denied";
-
+      ToastMessage.showErrorToast(
+          "Location Permission permanently Denied", locationMessage);
       return locationMessage;
     }
 

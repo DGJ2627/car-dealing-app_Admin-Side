@@ -6,7 +6,6 @@ class SplashScreenState extends Equatable {
   const SplashScreenState(this.splashTimeOver);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [splashTimeOver];
 
   SplashScreenState copyWith({int? splashTimeOver}) {
